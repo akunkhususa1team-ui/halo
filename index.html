@@ -1,333 +1,235 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Untuk Aila 💘</title>
+    <style>
+        :root{ --pink:#ff3d7f; --soft:#ff9bbb; --dark:#120012; --card:rgba(255,255,255,.14); }
+        *{margin:0;padding:0;box-sizing:border-box}
+        
+        html,body{width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif; overflow:hidden;}
+        body{ 
+            background:radial-gradient(circle at top,var(--soft),var(--dark)); 
+            display:flex; flex-direction:column; color:white; 
+        }
 
-<title>Untuk Aila 💘</title>
+        /* OPENING */
+        #opening{ position:fixed; inset:0; background:rgba(0,0,0,.85); backdrop-filter:blur(20px); display:grid; place-items:center; font-size:24px; cursor:pointer; z-index:9999; transition:0.8s; }
+        .fade-out{opacity:0; pointer-events:none}
 
-<!-- Anti IG Preview -->
-<meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta property="og:image" content="">
+        /* CONTAINER & CARD */
+        .container{ 
+            flex:1; display:flex; align-items:center; justify-content:center; 
+            padding:15px; z-index:10; min-height: 0;
+        }
+        
+        .card{ 
+            width:100%; max-width:380px; background:var(--card); backdrop-filter:blur(15px); 
+            border-radius:30px; padding:25px 20px; text-align:center; 
+            box-shadow:0 20px 50px rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+        }
 
-<style>
-:root{
-  --pink:#ff3d7f;
-  --soft:#ff9bbb;
-  --dark:#120012;
-  --card:rgba(255,255,255,.14);
-}
+        h1{ font-size:clamp(24px, 7vw, 32px); margin-bottom:15px; text-shadow:0 2px 10px rgba(0,0,0,0.3); }
+        
+        /* PHOTO WRAPPER - FIXED LARGE SIZE */
+        .photo-wrapper {
+            width: 240px; 
+            height: 240px;
+            margin: 0 auto;
+            position: relative;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100;
+        }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif}
+        .photo {
+            width: 100%; height: 100%;
+            border-radius: 20px; 
+            object-fit: cover;
+            box-shadow: 0 0 25px var(--pink);
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
-body{
-  background:radial-gradient(circle at top,var(--soft),var(--dark));
-  display:flex;
-  flex-direction:column;
-  overflow:hidden;
-  color:white;
-}
+        /* Portrait Mode Active */
+        .is-portrait {
+            width: 260px !important;
+            height: 380px !important;
+        }
+        
+        /* CONTENT PUSH */
+        h2#question { 
+            font-size: 18px; font-weight: 400; margin: 20px 0; 
+            transition: all 0.5s ease;
+        }
+        .buttons { 
+            position: relative; width: 100%; height: 100px; 
+            transition: all 0.5s ease;
+        }
+        .push-down { transform: translateY(20px); }
 
-/* OPENING */
-#opening{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(16px);
-  display:grid;
-  place-items:center;
-  font-size:clamp(18px,4vw,28px);
-  cursor:pointer;
-  z-index:999;
-  transition:opacity 1s ease;
-}
-.fade-out{opacity:0;pointer-events:none}
+        /* BUTTONS */
+        button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; position: absolute; font-weight: bold; transition: 0.2s; font-size: 16px; }
+        #yesBtn { left: 10%; background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); }
+        #noBtn { right: 10%; background: #444; color: white; }
 
-/* MAIN */
-.container{
-  flex:1;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-}
+        /* OVERLAY DISMISSAL AREA */
+        #dismiss-overlay {
+            position: fixed; inset: 0;
+            z-index: 50;
+            display: none;
+        }
 
-.card{
-  width:100%;
-  max-width:360px;
-  background:var(--card);
-  backdrop-filter:blur(14px);
-  border-radius:26px;
-  padding:26px 22px 30px;
-  text-align:center;
-  box-shadow:0 25px 60px rgba(0,0,0,.4);
-}
+        /* SPARKLE ANIMATION */
+        .sparkle {
+            position: fixed; pointer-events: none;
+            animation: fly 1s forwards cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 1000;
+        }
+        @keyframes fly {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6); opacity: 0; }
+        }
 
-h1{
-  font-size:clamp(22px,6vw,34px);
-  margin-bottom:6px;
-  text-shadow:0 2px 6px rgba(0,0,0,.5);
-}
+        /* RUNNING TEXT SAFE AREA */
+        .running { 
+            background: var(--pink); padding: 12px 0; 
+            overflow: hidden; white-space: nowrap; 
+            z-index: 100; position: relative; flex-shrink: 0;
+        }
+        .running span { display: inline-block; padding-left: 100%; animation: scroll 15s linear infinite; font-weight: bold; }
+        @keyframes scroll { to { transform: translateX(-100%); } }
 
-h2{
-  font-size:clamp(15px,4.5vw,20px);
-  font-weight:400;
-  margin-bottom:18px;
-  color:#ffe8ef;
-}
-
-/* PHOTO */
-.photo{
-  width:180px;
-  max-width:65vw;
-  aspect-ratio:1/1;
-  border-radius:18px;
-  object-fit:cover;
-  box-shadow:0 0 30px var(--pink);
-  margin:14px auto 20px;
-  display:block;
-}
-
-/* BUTTON */
-.buttons{
-  position:relative;
-  width:100%;
-  height:110px;
-}
-
-button{
-  padding:14px 24px;
-  font-size:clamp(14px,4vw,18px);
-  border:none;
-  border-radius:16px;
-  cursor:pointer;
-  position:absolute;
-  transition:.15s;
-  touch-action:none;
-}
-
-#yesBtn{
-  left:10%;
-  background:var(--pink);
-  color:white;
-  box-shadow:0 0 18px var(--pink);
-}
-
-#noBtn{
-  right:10%;
-  background:#666;
-  color:white;
-}
-
-/* RUNNING TEXT */
-.running{
-  background:var(--pink);
-  padding:12px 0;
-  overflow:hidden;
-}
-
-.running span{
-  display:inline-block;
-  white-space:nowrap;
-  padding-left:100%;
-  animation:scroll 14s linear infinite;
-}
-
-@keyframes scroll{
-  to{transform:translateX(-100%)}
-}
-
-/* HEART */
-.heart{
-  position:fixed;
-  top:-20px;
-  font-size:22px;
-  animation:fall linear forwards;
-  pointer-events:none;
-}
-
-@keyframes fall{
-  to{transform:translateY(110vh);opacity:0}
-}
-</style>
+        .heart-rain { position: fixed; top: -20px; animation: fall linear forwards; pointer-events: none; z-index: 5; }
+        @keyframes fall { to { transform: translateY(110vh); opacity: 0; } }
+    </style>
 </head>
-
 <body>
 
-<div id="opening">✨ Klik untuk mulai ✨</div>
+    <div id="opening">✨ Klik untuk Aila ✨</div>
+    <div id="dismiss-overlay"></div>
 
-<div class="container">
-  <div class="card">
-    <h1>Untuk Aila 💖</h1>
-    <img src="foto.jpg" class="photo">
-    <h2>Mau jalan sama aku nggak? 🥺</h2>
+    <div class="container">
+        <div class="card" id="mainCard">
+            <h1>Untuk Aila 💖</h1>
+            
+            <div class="photo-wrapper" id="pWrapper">
+                <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aila">
+            </div>
 
-    <div class="buttons" id="area">
-      <button id="yesBtn">Yes 😍</button>
-      <button id="noBtn">No 😜</button>
+            <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
+            
+            <div class="buttons" id="btnArea">
+                <button id="yesBtn">Yes 😍</button>
+                <button id="noBtn">No 😜</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="running">
-  <span>💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine yang tidak merayakan aku tidak merayakan valentinenya  💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
-</div>
+    <div class="running">
+        <span>💘 Happy Valentine Aila 💘 Semangat terus yaa! 💘 Senyum dong! 😜 💘 ini cuma iseng-iseng bikin gini an wkwk 💘</span>
+    </div>
 
-<!-- AUDIO -->
-<audio id="music" preload="none">
-  <source src="Timur.mp3" type="audio/mpeg">
-</audio>
-
-<audio id="music2" preload="none">
-  <source src="MyEverything.mp3" type="audio/mpeg">
-</audio>
+    <audio id="music" loop><source src="Timur.mp3" type="audio/mpeg"></audio>
+    <audio id="music2"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
 
 <script>
-const opening = document.getElementById("opening");
-const music   = document.getElementById("music");
-const music2 = document.getElementById("music2");
+    const wrapper = document.getElementById("pWrapper");
+    const photo = document.getElementById("mainPhoto");
+    const question = document.getElementById("question");
+    const btnArea = document.getElementById("btnArea");
+    const opening = document.getElementById("opening");
+    const overlay = document.getElementById("dismiss-overlay");
+    const music = document.getElementById("music");
+    const music2 = document.getElementById("music2");
 
-/* PLAY OPENING */
-opening.onclick=()=>{
-  opening.classList.add("fade-out");
-  music.volume=0;
-  music.play().catch(()=>{});
-  let v=0;
-  const fade=setInterval(()=>{
-    v+=0.05;
-    music.volume=v;
-    if(v>=1) clearInterval(fade);
-  },100);
-};
+    // FUNGSI AKTIVASI PORTRAIT & DISMISSAL
+    function togglePortrait(show, e = null) {
+        if (show) {
+            wrapper.classList.add("is-portrait");
+            question.classList.add("push-down");
+            btnArea.classList.add("push-down");
+            overlay.style.display = "block";
+            if(e) createSparks(e.clientX, e.clientY);
+        } else {
+            wrapper.classList.remove("is-portrait");
+            question.classList.remove("push-down");
+            btnArea.classList.remove("push-down");
+            overlay.style.display = "none";
+        }
+    }
 
-/* STOP ALL MUSIC */
-function stopAll(){
-  if(!allowStop) return;
-  [music,music2].forEach(m=>{
-    if(!m) return;
-    m.pause();
-    m.currentTime=0;
-  });
-}
+    // Klik pada foto
+    photo.onclick = (e) => {
+        e.stopPropagation();
+        const active = wrapper.classList.contains("is-portrait");
+        togglePortrait(!active, e);
+    };
 
+    // Klik di luar foto (overlay atau body)
+    overlay.onclick = () => togglePortrait(false);
+    document.querySelector('.container').onclick = (e) => {
+        if(e.target !== photo) togglePortrait(false);
+    };
 
-document.addEventListener("visibilitychange",()=>{
-  if(document.hidden) stopAll(); 
-});
-window.addEventListener("pagehide",stopAll);
-window.addEventListener("beforeunload",stopAll);
-window.addEventListener("blur",stopAll);
-  
- /* ===== PLAY MUSIC (AMAN iOS / IG) ===== */
-/*opening.addEventListener("click",()=>{
-  opening.classList.add("fade-out");
-  music.volume = 0;
-  music.play().catch(()=>{});
-  let v=0;
-  const fade=setInterval(()=>{
-    v+=0.05;
-    music.volume=v;
-    if(v>=1) clearInterval(fade);
-  },100);
-}); */
+    function createSparks(x, y) {
+        const particles = ['✨', '⭐', '💖', '🌸', '💘'];
+        for (let i = 0; i < 20; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+            s.style.left = x + 'px'; s.style.top = y + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 150 + 50;
+            s.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+            s.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+            s.style.fontSize = (Math.random() * 10 + 15) + 'px';
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 1000);
+        }
+    }
 
-/* ===== HARD STOP AUDIO (FINAL FIX) ===== */
-/*function hardStopMusic(){
-  if(!music) return;
-  music.pause();
-  music.currentTime = 0;
-}
+    opening.onclick = () => {
+        opening.classList.add("fade-out");
+        music.play().catch(() => {});
+    };
 
-document.addEventListener("visibilitychange",()=>{
-  if(document.hidden) hardStopMusic();
-});
+    const noBtn = document.getElementById("noBtn");
+    function moveNo() {
+        const maxX = btnArea.clientWidth - noBtn.offsetWidth;
+        const maxY = btnArea.clientHeight - noBtn.offsetHeight;
+        noBtn.style.left = Math.random() * maxX + "px";
+        noBtn.style.top = Math.random() * maxY + "px";
+    }
+    ["mouseenter", "touchstart"].forEach(evt => {
+        noBtn.addEventListener(evt, (e) => {
+            if(evt === "touchstart") e.preventDefault();
+            moveNo();
+        });
+    });
 
-window.addEventListener("pagehide", hardStopMusic);
-window.addEventListener("beforeunload", hardStopMusic);
-window.addEventListener("blur", hardStopMusic); */
+    document.getElementById("yesBtn").onclick = () => {
+        music.pause(); music2.play().catch(() => {});
+        const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
+        voice.lang = "id-ID"; speechSynthesis.speak(voice);
+        document.body.style.transition = "opacity 0.8s";
+        document.body.style.opacity = "0";
+        setTimeout(() => {
+            document.body.innerHTML = `<div class="container"><div class="card"><h1 style="color:#f0ddea"> YEAYYY 💕<br>Aila mau jalan sama aku hehe 😆💘 </h1></div></div><div class="running"><span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span></div>`;
+            document.body.style.opacity = "1";
+        }, 800);
+    };
 
-/* ==== AUTO PAUSE / RESUME (FINAL FIX IOS) ==== */
-/*function pauseMusic(){
-  if(!music.paused) music.pause();
-}
-function resumeMusic(){
-  if(!opening.classList.contains("hide")) return;
-  music.play().catch(()=>{});
-}
-
-document.addEventListener("visibilitychange",()=>{
-  document.hidden ? pauseMusic() : resumeMusic();
-}); */
-
-/* ===== NO BUTTON FIX (MOBILE SAFE) ===== */
-const noBtn=document.getElementById("noBtn");
-const area=document.getElementById("area");
-
-function moveNo(){
-  const maxX=area.clientWidth-noBtn.offsetWidth;
-  const maxY=area.clientHeight-noBtn.offsetHeight;
-  noBtn.style.left=Math.random()*maxX+"px";
-  noBtn.style.top=Math.random()*maxY+"px";
-}
-
-["mouseenter","touchstart","pointerdown"].forEach(e=>{
-  noBtn.addEventListener(e,ev=>{
-    ev.preventDefault();
-    moveNo();
-  });
-});
-
-/* ===== HEART RAIN ===== */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.textContent="💖";
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=(Math.random()*2+3)+"s";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),5000);
-},350);
-
-/* ===== YES CLICK ===== */
-document.getElementById("yesBtn").onclick=()=>{
-
-  allowStop = false; // ⬅️ INI KUNCI NYA
-
-  music.pause();
-  music.currentTime = 0;
-
-  music2.volume=1;
-  music2.play().catch(()=>{});
-
-  const voice=new SpeechSynthesisUtterance(
-    "Yeayyyy! Aila mau jalan sama aku hehehehe");
-  voice.lang="id-ID";
-  voice.rate=.95;
-  voice.pitch=1.2;
-  speechSynthesis.speak(voice);
-
-  document.body.style.transition="opacity 1.2s";
-  document.body.style.opacity="0";
-
-  setTimeout(()=>{
-    document.body.innerHTML=`
-      <div class="container">
-        <div class="card">
-          <h1 style="color:#f0ddea">
-            YEAYYY 💕<br>Aila mau jalan sama aku hehe 😆💘
-          </h1>
-        </div>
-      </div>
-      <div class="running">
-        <span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span>
-      </div>
-    `;
-    document.body.style.opacity="1";
-  },1200);
-};
+    setInterval(() => {
+        const h = document.createElement("div");
+        h.className = "heart-rain"; h.innerHTML = "💖";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.fontSize = (Math.random() * 10 + 15) + "px";
+        h.style.animationDuration = (Math.random() * 2 + 3) + "s";
+        document.body.appendChild(h);
+        setTimeout(() => h.remove(), 5000);
+    }, 300);
 </script>
-
 </body>
 </html>
