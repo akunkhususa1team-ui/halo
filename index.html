@@ -69,8 +69,7 @@
         <span>💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine 💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
     </div>
 
-    <audio id="music" loop preload="auto"><source src="Timur.mp3" type="audio/mpeg"></audio>
-    <audio id="music2" preload="auto"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
+    <audio id="mainAudio" preload="auto"></audio>
 
 <script>
     const noBtn = document.getElementById("noBtn");
@@ -78,9 +77,12 @@
     const pWrapper = document.getElementById("pWrapper");
     const photo = document.getElementById("mainPhoto");
     const opening = document.getElementById("opening");
-    const music = document.getElementById("music");
-    const music2 = document.getElementById("music2");
+    const mainAudio = document.getElementById("mainAudio");
     const overlay = document.getElementById("dismiss-overlay");
+
+    // File musik
+    const lagu1 = "Timur.mp3";
+    const lagu2 = "MyEverything.mp3";
 
     function createSparks(x, y, isFirework = false) {
         const particles = isFirework ? ['💥', '✨', '💖', '⭐'] : ['✨', '⭐', '💖', '🌸'];
@@ -136,37 +138,38 @@
     noBtn.addEventListener("mouseover", moveNo);
     noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNo(); });
 
+    // Mulai lagu 1 saat klik Opening
     opening.onclick = () => {
         opening.classList.add("fade-out");
-        music.play();
-        
-        // PENTING: Pancing browser agar music2 boleh diputar nanti
-        music2.volume = 0;
-        music2.play().then(() => {
-            music2.pause();
-            music2.currentTime = 0;
-            music2.volume = 1; // Kembalikan volume normal untuk nanti
-        });
+        mainAudio.src = lagu1;
+        mainAudio.loop = true;
+        mainAudio.play().catch(e => console.log("Audio play blocked by browser"));
     };
 
+    // Ganti ke lagu 2 saat klik Yes
     yesBtn.onclick = () => {
-        // Matikan music 1
-        music.pause();
-        music.currentTime = 0;
+        // Ganti source secara paksa
+        mainAudio.pause();
+        mainAudio.src = lagu2;
+        mainAudio.loop = false; // My Everything biasanya sekali putar atau sesuai keinginan
+        mainAudio.load(); 
+        
+        // Mainkan segera setelah source diganti
+        const playPromise = mainAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                console.log("Lagu 2 berhasil diputar!");
+            }).catch(error => {
+                // Autoplay was prevented
+                console.log("Gagal putar lagu 2, mencoba lagi...");
+                mainAudio.play();
+            });
+        }
 
-        // Nyalakan music 2 (My Everything) tepat saat klik
-        music2.currentTime = 0;
-        music2.play().catch(() => {
-            // Backup jika play pertama gagal
-            music2.play();
-        });
-
-        // Suara Google
         const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
         voice.lang = "id-ID";
         window.speechSynthesis.speak(voice);
 
-        // Kembang Api Beruntun
         for(let i=0; i<10; i++) {
             setTimeout(() => {
                 createSparks(Math.random() * window.innerWidth, Math.random() * window.innerHeight, true);
