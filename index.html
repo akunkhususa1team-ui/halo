@@ -7,23 +7,15 @@
     <style>
         :root{ --pink:#ff3d7f; --soft:#ff9bbb; --dark:#120012; --card:rgba(255,255,255,.14); }
         *{margin:0;padding:0;box-sizing:border-box}
-        
         html,body{width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif; overflow:hidden;}
-        body{ 
-            background:radial-gradient(circle at top,var(--soft),var(--dark)); 
-            display:flex; flex-direction:column; color:white; 
-        }
+        body{ background:radial-gradient(circle at top,var(--soft),var(--dark)); display:flex; flex-direction:column; color:white; }
 
         /* OPENING */
         #opening{ position:fixed; inset:0; background:rgba(0,0,0,.85); backdrop-filter:blur(20px); display:grid; place-items:center; font-size:24px; cursor:pointer; z-index:9999; transition:0.8s; }
         .fade-out{opacity:0; pointer-events:none}
 
         /* CONTAINER & CARD */
-        .container{ 
-            flex:1; display:flex; align-items:center; justify-content:center; 
-            padding:15px; z-index:10; min-height: 0;
-        }
-        
+        .container{ flex:1; display:flex; align-items:center; justify-content:center; padding:15px; z-index:10; min-height: 0; }
         .card{ 
             width:100%; max-width:380px; background:var(--card); backdrop-filter:blur(15px); 
             border-radius:30px; padding:25px 20px; text-align:center; 
@@ -34,40 +26,21 @@
 
         h1{ font-size:clamp(24px, 7vw, 32px); margin-bottom:15px; text-shadow:0 2px 10px rgba(0,0,0,0.3); }
         
-        /* PHOTO WRAPPER - FIXED LARGE SIZE */
+        /* PHOTO WRAPPER */
         .photo-wrapper {
-            width: 240px; 
-            height: 240px;
-            margin: 0 auto;
-            position: relative;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 100;
+            width: 240px; height: 240px; margin: 0 auto;
+            position: relative; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100;
         }
-
         .photo {
-            width: 100%; height: 100%;
-            border-radius: 20px; 
-            object-fit: cover;
-            box-shadow: 0 0 25px var(--pink);
-            cursor: pointer;
+            width: 100%; height: 100%; border-radius: 20px; object-fit: cover;
+            box-shadow: 0 0 25px var(--pink); cursor: pointer;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .is-portrait { width: 260px !important; height: 380px !important; }
 
-        /* Portrait Mode Active */
-        .is-portrait {
-            width: 260px !important;
-            height: 380px !important;
-        }
-        
-        /* CONTENT PUSH */
-        h2#question { 
-            font-size: 18px; font-weight: 400; margin: 20px 0; 
-            transition: all 0.5s ease;
-        }
-        .buttons { 
-            position: relative; width: 100%; height: 100px; 
-            transition: all 0.5s ease;
-        }
+        /* ANIMATION ELEMENTS */
+        h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; transition: all 0.5s ease; }
+        .buttons { position: relative; width: 100%; height: 100px; transition: all 0.5s ease; }
         .push-down { transform: translateY(20px); }
 
         /* BUTTONS */
@@ -75,29 +48,18 @@
         #yesBtn { left: 10%; background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); }
         #noBtn { right: 10%; background: #444; color: white; }
 
-        /* OVERLAY DISMISSAL AREA */
-        #dismiss-overlay {
-            position: fixed; inset: 0;
-            z-index: 50;
-            display: none;
-        }
+        /* OVERLAY DISMISS */
+        #dismiss-overlay { position: fixed; inset: 0; z-index: 50; display: none; }
 
-        /* SPARKLE ANIMATION */
-        .sparkle {
-            position: fixed; pointer-events: none;
-            animation: fly 1s forwards cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 1000;
-        }
+        /* SPARKLE */
+        .sparkle { position: fixed; pointer-events: none; animation: fly 1s forwards cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 1000; }
         @keyframes fly {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
             100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6); opacity: 0; }
         }
 
-        /* RUNNING TEXT SAFE AREA */
-        .running { 
-            background: var(--pink); padding: 12px 0; 
-            overflow: hidden; white-space: nowrap; 
-            z-index: 100; position: relative; flex-shrink: 0;
-        }
+        /* RUNNING TEXT */
+        .running { background: var(--pink); padding: 12px 0; overflow: hidden; white-space: nowrap; z-index: 100; position: relative; flex-shrink: 0; }
         .running span { display: inline-block; padding-left: 100%; animation: scroll 15s linear infinite; font-weight: bold; }
         @keyframes scroll { to { transform: translateX(-100%); } }
 
@@ -113,13 +75,10 @@
     <div class="container">
         <div class="card" id="mainCard">
             <h1>Untuk Aila 💖</h1>
-            
             <div class="photo-wrapper" id="pWrapper">
                 <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aila">
             </div>
-
             <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
-            
             <div class="buttons" id="btnArea">
                 <button id="yesBtn">Yes 😍</button>
                 <button id="noBtn">No 😜</button>
@@ -131,8 +90,8 @@
         <span>💘 Happy Valentine Aila 💘 Semangat terus yaa! 💘 Senyum dong! 😜 💘 ini cuma iseng-iseng bikin gini an wkwk 💘</span>
     </div>
 
-    <audio id="music" loop><source src="Timur.mp3" type="audio/mpeg"></audio>
-    <audio id="music2"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
+    <audio id="music" loop preload="auto"><source src="Timur.mp3" type="audio/mpeg"></audio>
+    <audio id="music2" preload="auto"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
 
 <script>
     const wrapper = document.getElementById("pWrapper");
@@ -144,7 +103,7 @@
     const music = document.getElementById("music");
     const music2 = document.getElementById("music2");
 
-    // FUNGSI AKTIVASI PORTRAIT & DISMISSAL
+    // FUNGSI TOGGLE PORTRAIT
     function togglePortrait(show, e = null) {
         if (show) {
             wrapper.classList.add("is-portrait");
@@ -160,18 +119,9 @@
         }
     }
 
-    // Klik pada foto
-    photo.onclick = (e) => {
-        e.stopPropagation();
-        const active = wrapper.classList.contains("is-portrait");
-        togglePortrait(!active, e);
-    };
-
-    // Klik di luar foto (overlay atau body)
+    photo.onclick = (e) => { e.stopPropagation(); togglePortrait(!wrapper.classList.contains("is-portrait"), e); };
     overlay.onclick = () => togglePortrait(false);
-    document.querySelector('.container').onclick = (e) => {
-        if(e.target !== photo) togglePortrait(false);
-    };
+    document.querySelector('.container').onclick = (e) => { if(e.target !== photo) togglePortrait(false); };
 
     function createSparks(x, y) {
         const particles = ['✨', '⭐', '💖', '🌸', '💘'];
@@ -184,17 +134,20 @@
             const dist = Math.random() * 150 + 50;
             s.style.setProperty('--x', Math.cos(angle) * dist + 'px');
             s.style.setProperty('--y', Math.sin(angle) * dist + 'px');
-            s.style.fontSize = (Math.random() * 10 + 15) + 'px';
             document.body.appendChild(s);
             setTimeout(() => s.remove(), 1000);
         }
     }
 
+    // OPENING - LOAD KEDUA AUDIO SEKALIGUS
     opening.onclick = () => {
         opening.classList.add("fade-out");
         music.play().catch(() => {});
+        // Pancing music2 agar siap diputar (tanpa suara dulu)
+        music2.play().then(() => { music2.pause(); music2.currentTime = 0; }).catch(() => {});
     };
 
+    // NO BUTTON FIX
     const noBtn = document.getElementById("noBtn");
     function moveNo() {
         const maxX = btnArea.clientWidth - noBtn.offsetWidth;
@@ -202,17 +155,28 @@
         noBtn.style.left = Math.random() * maxX + "px";
         noBtn.style.top = Math.random() * maxY + "px";
     }
-    ["mouseenter", "touchstart"].forEach(evt => {
-        noBtn.addEventListener(evt, (e) => {
-            if(evt === "touchstart") e.preventDefault();
-            moveNo();
-        });
-    });
+    ["mouseenter", "touchstart"].forEach(evt => noBtn.addEventListener(evt, (e) => { if(evt === "touchstart") e.preventDefault(); moveNo(); }));
 
-    document.getElementById("yesBtn").onclick = () => {
-        music.pause(); music2.play().catch(() => {});
+    // YES BUTTON FIX - JAMINAN AUDIO PLAY
+    document.getElementById("yesBtn").onclick = function() {
+        // Matikan music 1 sepenuhnya
+        music.pause();
+        music.currentTime = 0;
+        
+        // Putar music 2 secara paksa
+        music2.volume = 1.0;
+        var playPromise = music2.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Autoplay dicegah, mencoba lagi...");
+                music2.play(); // Retry
+            });
+        }
+
         const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
         voice.lang = "id-ID"; speechSynthesis.speak(voice);
+
         document.body.style.transition = "opacity 0.8s";
         document.body.style.opacity = "0";
         setTimeout(() => {
@@ -225,7 +189,6 @@
         const h = document.createElement("div");
         h.className = "heart-rain"; h.innerHTML = "💖";
         h.style.left = Math.random() * 100 + "vw";
-        h.style.fontSize = (Math.random() * 10 + 15) + "px";
         h.style.animationDuration = (Math.random() * 2 + 3) + "s";
         document.body.appendChild(h);
         setTimeout(() => h.remove(), 5000);
