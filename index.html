@@ -7,7 +7,7 @@
     <style>
         :root{ --pink:#ff3d7f; --soft:#ff9bbb; --dark:#120012; --card:rgba(255,255,255,.14); }
         *{margin:0;padding:0;box-sizing:border-box}
-        html,body{width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif; overflow:hidden;}
+        html,body{width:100%;height:100%;font-family:"Segoe UI",Arial,sans-serif; overflow:hidden; position: relative;}
         body{ background:radial-gradient(circle at top,var(--soft),var(--dark)); display:flex; flex-direction:column; color:white; }
 
         /* OPENING */
@@ -15,51 +15,52 @@
         .fade-out{opacity:0; pointer-events:none}
 
         /* CONTAINER & CARD */
-        .container{ flex:1; display:flex; align-items:center; justify-content:center; padding:15px; z-index:10; min-height: 0; }
+        .container{ flex:1; display:flex; align-items:center; justify-content:center; padding:15px; z-index:10; }
         .card{ 
             width:100%; max-width:380px; background:var(--card); backdrop-filter:blur(15px); 
             border-radius:30px; padding:25px 20px; text-align:center; 
             box-shadow:0 20px 50px rgba(0,0,0,0.3); border:1px solid rgba(255,255,255,0.1);
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative; z-index: 100;
+            position: relative; z-index: 100; transition: all 0.5s ease;
         }
 
-        h1{ font-size:clamp(24px, 7vw, 32px); margin-bottom:15px; text-shadow:0 2px 10px rgba(0,0,0,0.3); }
+        h1{ font-size:clamp(24px, 7vw, 32px); margin-bottom:15px; }
         
-        /* PHOTO WRAPPER */
-        .photo-wrapper {
-            width: 240px; height: 240px; margin: 0 auto;
-            position: relative; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 110;
+        /* FOTO LOGIC */
+        .photo-wrapper { 
+            width: 180px; height: 180px; margin: 0 auto; 
+            position: relative; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 110;
         }
-        .photo {
-            width: 100%; height: 100%; border-radius: 20px; object-fit: cover;
+        .photo { 
+            width: 100%; height: 100%; border-radius: 20px; object-fit: cover; 
             box-shadow: 0 0 25px var(--pink); cursor: pointer;
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .is-portrait { width: 260px !important; height: 380px !important; }
+        /* Style saat foto di-klik (Zoom) */
+        .is-portrait { width: 250px; height: 350px; transform: scale(1.1); }
 
-        h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; transition: all 0.5s ease; }
-        .buttons { position: relative; width: 100%; height: 100px; transition: all 0.5s ease; z-index: 120; }
-        .push-down { transform: translateY(20px); }
+        h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; }
+        
+        .buttons { position: relative; width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; gap: 20px; }
 
-        /* BUTTONS */
-        button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; position: absolute; font-weight: bold; transition: 0.2s; font-size: 16px; z-index: 130; touch-action: manipulation; }
-        #yesBtn { left: 10%; background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); }
-        #noBtn { right: 10%; background: #444; color: white; }
-
-        #dismiss-overlay { position: fixed; inset: 0; z-index: 50; display: none; }
+        button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; touch-action: manipulation; }
+        
+        #yesBtn { background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); z-index: 1000; position: relative; }
+        
+        #noBtn { 
+            background: #444; color: white; 
+            z-index: 999; 
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
         /* RUNNING TEXT */
-        .running { background: var(--pink); padding: 12px 0; overflow: hidden; white-space: nowrap; z-index: 100; position: relative; flex-shrink: 0; }
-        .running span { display: inline-block; padding-left: 100%; animation: scroll 20s linear infinite; font-weight: bold; font-size: 14px; }
+        .running { background: var(--pink); padding: 12px 0; overflow: hidden; white-space: nowrap; flex-shrink: 0; z-index: 10; }
+        .running span { display: inline-block; padding-left: 100%; animation: scroll 25s linear infinite; font-weight: bold; font-size: 14px; }
         @keyframes scroll { to { transform: translateX(-100%); } }
+        
+        /* OVERLAY UNTUK ZOOM */
+        #dismiss-overlay { position: fixed; inset: 0; z-index: 105; display: none; background: rgba(0,0,0,0.2); }
 
-        /* DECORATION */
-        .sparkle { position: fixed; pointer-events: none; animation: fly 1s forwards; z-index: 1000; }
-        @keyframes fly {
-            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-            100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6); opacity: 0; }
-        }
         .heart-rain { position: fixed; top: -20px; animation: fall linear forwards; pointer-events: none; z-index: 5; }
         @keyframes fall { to { transform: translateY(110vh); opacity: 0; } }
     </style>
@@ -76,7 +77,7 @@
                 <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aila">
             </div>
             <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
-            <div class="buttons" id="btnArea">
+            <div class="buttons">
                 <button id="yesBtn">Yes 😍</button>
                 <button id="noBtn">No 😜</button>
             </div>
@@ -84,118 +85,122 @@
     </div>
 
     <div class="running">
-        <span id="runText">💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine yang tidak merayakan aku tidak merayakan valentinenya 💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
+        <span>💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine yang tidak merayakan aku tidak merayakan valentinenya 💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
     </div>
 
-    <audio id="music" loop preload="auto"><source src="Timur.mp3" type="audio/mpeg"></audio>
-    <audio id="music2" preload="auto"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
+    <audio id="music" loop><source src="Timur.mp3" type="audio/mpeg"></audio>
+    <audio id="music2"><source src="MyEverything.mp3" type="audio/mpeg"></audio>
 
 <script>
     const wrapper = document.getElementById("pWrapper");
     const photo = document.getElementById("mainPhoto");
-    const question = document.getElementById("question");
-    const btnArea = document.getElementById("btnArea");
+    const noBtn = document.getElementById("noBtn");
+    const yesBtn = document.getElementById("yesBtn");
     const opening = document.getElementById("opening");
     const overlay = document.getElementById("dismiss-overlay");
     const music = document.getElementById("music");
     const music2 = document.getElementById("music2");
 
-    // FUNGSI ZOOM & DISMISS
-    function togglePortrait(show, e = null) {
-        if (show) {
-            wrapper.classList.add("is-portrait");
-            question.classList.add("push-down");
-            btnArea.classList.add("push-down");
-            overlay.style.display = "block";
-            if(e) createSparks(e.clientX, e.clientY);
-        } else {
-            wrapper.classList.remove("is-portrait");
-            question.classList.remove("push-down");
-            btnArea.classList.remove("push-down");
-            overlay.style.display = "none";
-        }
-    }
-
-    photo.onclick = (e) => { e.stopPropagation(); togglePortrait(!wrapper.classList.contains("is-portrait"), e); };
-    overlay.onclick = () => togglePortrait(false);
-
-    function createSparks(x, y) {
-        const particles = ['✨', '⭐', '💖', '🌸', '💘'];
-        for (let i = 0; i < 15; i++) {
-            const s = document.createElement('div');
-            s.className = 'sparkle';
-            s.innerHTML = particles[Math.floor(Math.random() * particles.length)];
-            s.style.left = x + 'px'; s.style.top = y + 'px';
-            const angle = Math.random() * Math.PI * 2;
-            const dist = Math.random() * 100 + 50;
-            s.style.setProperty('--x', Math.cos(angle) * dist + 'px');
-            s.style.setProperty('--y', Math.sin(angle) * dist + 'px');
-            document.body.appendChild(s);
-            setTimeout(() => s.remove(), 1000);
-        }
-    }
-
-    // OPENING
-    opening.onclick = () => {
-        opening.classList.add("fade-out");
-        music.play().catch(e => console.log("Music 1 blocked"));
-        // Pancing music2 agar dapat izin (muted play)
-        music2.muted = true;
-        music2.play().then(() => { music2.pause(); music2.muted = false; }).catch(e => {});
+    // FUNGSI ZOOM FOTO (FIXED)
+    photo.onclick = (e) => {
+        e.stopPropagation();
+        const isZoomed = wrapper.classList.toggle("is-portrait");
+        overlay.style.display = isZoomed ? "block" : "none";
     };
 
-    // NO BUTTON
-    const noBtn = document.getElementById("noBtn");
+    overlay.onclick = () => {
+        wrapper.classList.remove("is-portrait");
+        overlay.style.display = "none";
+    };
+
+    opening.onclick = () => {
+        opening.classList.add("fade-out");
+        music.play().catch(e => {});
+        music2.play().then(() => { music2.pause(); music2.currentTime = 0; }).catch(e => {});
+    };
+
+    // LOGIKA TOMBOL NO KABUR (RESPONSIVE & TETAP DI LAYAR)
     function moveNo() {
-        const maxX = btnArea.clientWidth - noBtn.offsetWidth;
-        const maxY = btnArea.clientHeight - noBtn.offsetHeight;
-        noBtn.style.left = Math.random() * maxX + "px";
-        noBtn.style.top = Math.random() * maxY + "px";
+        noBtn.style.position = "fixed";
+        
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+        
+        // Batas aman layar
+        const maxX = window.innerWidth - btnWidth - 20;
+        const maxY = window.innerHeight - btnHeight - 20;
+        
+        const yesRect = yesBtn.getBoundingClientRect();
+        const photoRect = wrapper.getBoundingClientRect();
+        const safeZone = 80; 
+
+        let randomX, randomY;
+        let isSafe = false;
+
+        for(let i=0; i<50; i++) {
+            randomX = Math.max(10, Math.random() * maxX);
+            randomY = Math.max(10, Math.random() * maxY);
+
+            // Cek agar tidak menabrak tombol YES
+            const collisionYes = randomX + btnWidth > yesRect.left - safeZone && randomX < yesRect.right + safeZone;
+            const collisionY_Yes = randomY + btnHeight > yesRect.top - safeZone && randomY < yesRect.bottom + safeZone;
+
+            // Cek agar tidak menabrak FOTO (biar fungsi klik foto tidak terganggu)
+            const collisionPhoto = randomX + btnWidth > photoRect.left && randomX < photoRect.right;
+            const collisionY_Photo = randomY + btnHeight > photoRect.top && randomY < photoRect.bottom;
+
+            if (!(collisionYes && collisionY_Yes) && !(collisionPhoto && collisionY_Photo)) {
+                isSafe = true;
+                break;
+            }
+        }
+
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
+        noBtn.style.transform = `rotate(${Math.floor(Math.random() * 30) - 15}deg) scale(0.95)`;
     }
+
     noBtn.addEventListener("mouseover", moveNo);
-    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNo(); });
+    noBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        moveNo();
+    });
 
-    // YES BUTTON - ANTI NABRAK FIX
-    document.getElementById("yesBtn").addEventListener("click", function() {
-        // 1. Matikan music 1 seketika
+    // ACTION YES
+    yesBtn.onclick = () => {
+        document.body.style.opacity = "0";
         music.pause();
-        music.currentTime = 0; // Reset ke awal agar tidak tersisa di buffer
-
-        // 2. Putar music 2
-        music2.currentTime = 0;
-        music2.play().catch(e => console.log("Music 2 blocked"));
-
-        // 3. Suara Google
+        music2.play().catch(e => {});
+        
         const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
         voice.lang = "id-ID";
         window.speechSynthesis.speak(voice);
 
-        // 4. Efek Visual
-        document.body.style.transition = "opacity 0.5s";
-        document.body.style.opacity = "0";
-        
         setTimeout(() => {
             document.body.innerHTML = `
                 <div class="container">
                     <div class="card">
-                        <h1 style="color:#f0ddea"> YEAYYY 💕<br>Aila mau jalan sama aku hehe 😆💘 </h1>
+                        <h1>YEAYYY! 💕</h1>
+                        <p style="font-size:18px; color:white; margin:15px 0;">Aila mau jalan sama aku! 😆💘</p>
+                        <p style="font-size:60px;">🥰</p>
                     </div>
                 </div>
                 <div class="running">
-                    <span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span>
+                    <span>💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine yang tidak merayakan aku tidak merayakan valentinenya 💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
                 </div>`;
             document.body.style.opacity = "1";
         }, 500);
-    });
+    };
 
+    // Hujan Hati
     setInterval(() => {
         const h = document.createElement("div");
         h.className = "heart-rain"; h.innerHTML = "💖";
         h.style.left = Math.random() * 100 + "vw";
-        h.style.animationDuration = (Math.random() * 2 + 3) + "s";
+        h.style.animationDuration = (Math.random() * 2 + 2) + "s";
         document.body.appendChild(h);
-        setTimeout(() => h.remove(), 5000);
-    }, 300);
+        setTimeout(() => h.remove(), 4000);
+    }, 400);
 </script>
 </body>
 </html>
