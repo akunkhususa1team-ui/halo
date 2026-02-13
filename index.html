@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Untuk Aila 💘</title>
+    <title>Untuk Aili 💘</title>
     <style>
         :root{ --pink:#ff3d7f; --soft:#ff9bbb; --dark:#120012; --card:rgba(255,255,255,.14); }
         *{margin:0;padding:0;box-sizing:border-box}
@@ -27,6 +27,10 @@
         .photo-wrapper { width: 180px; height: 180px; margin: 0 auto; position: relative; z-index: 110; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .photo { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 0 25px var(--pink); cursor: pointer; }
         .is-portrait { width: 240px !important; height: 320px !important; }
+
+        /* Info Box Styles (Space Filler) */
+        .info-box { margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
+        .info-item { font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
 
         h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; }
         .buttons { position: relative; width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; gap: 20px; }
@@ -54,15 +58,22 @@
 </head>
 <body>
 
-    <div id="opening">✨ Klik untuk Aila ✨</div>
+    <div id="opening">✨ Klik untuk Aili ✨</div>
     <div id="dismiss-overlay" style="position:fixed; inset:0; display:none; z-index:50;"></div>
 
     <div class="container" id="mainCon">
         <div class="card" id="mainCard">
-            <h1>Untuk Aila 💖</h1>
+            <h1>Untuk Aili 💖</h1>
             <div class="photo-wrapper" id="pWrapper">
-                <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aila">
+                <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aili">
             </div>
+
+            <div class="info-box">
+                <div class="info-item">📍 <span><b>Location:</b> Secret / Your Choice</span></div>
+                <div class="info-item">📅 <span><b>Date:</b> Weekend ini?</span></div>
+                <div class="info-item">✨ <span><b>Outfit:</b> Yang bikin kamu nyaman</span></div>
+            </div>
+
             <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
             <div class="buttons">
                 <button id="yesBtn">Yes 😍</button>
@@ -72,7 +83,7 @@
     </div>
 
     <div class="running">
-        <span id="runText">💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine Aila 💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
+        <span id="runText">💘 Happy Valentine Aili 💘 Makasih udah mau buka ini 💘 Have a great day! 💘</span>
     </div>
 
     <audio id="mainAudio" preload="auto"></audio>
@@ -89,7 +100,6 @@
     const lagu1 = "Timur.mp3";
     const lagu2 = "MyEverything.mp3";
 
-    // Fungsi Sparks & Kembang Api
     function createSparks(x, y, isFirework = false) {
         const particles = isFirework ? ['💥', '✨', '💖', '⭐', '🌸'] : ['✨', '⭐', '💖', '🌸'];
         const count = isFirework ? 20 : 12;
@@ -108,7 +118,6 @@
         }
     }
 
-    // Zoom Foto
     photo.onclick = (e) => {
         const isZoomed = pWrapper.classList.toggle("is-portrait");
         overlay.style.display = isZoomed ? "block" : "none";
@@ -120,7 +129,6 @@
         overlay.style.display = "none";
     };
 
-    // Tombol No Kabur (Anti Tabrak)
     function moveNo() {
         noBtn.style.position = "fixed";
         const btnW = noBtn.offsetWidth;
@@ -149,7 +157,6 @@
     noBtn.addEventListener("mouseover", moveNo);
     noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNo(); });
 
-    // Mulai lagu 1
     opening.onclick = () => {
         opening.classList.add("fade-out");
         mainAudio.src = lagu1;
@@ -157,7 +164,6 @@
         mainAudio.play().catch(() => {});
     };
 
-    // Tombol YES (Halaman Tiket & Balon)
     yesBtn.onclick = () => {
         mainAudio.pause();
         mainAudio.src = lagu2;
@@ -165,11 +171,10 @@
         mainAudio.load();
         mainAudio.play().catch(() => mainAudio.play());
 
-        const voice = new SpeechSynthesisUtterance("Yeay! Tiket kencan berhasil diklaim. Sampai ketemu nanti ya, Aila!");
+        const voice = new SpeechSynthesisUtterance("Yeay! Tiket kencan berhasil diklaim. Sampai ketemu nanti ya, Aili!");
         voice.lang = "id-ID";
         window.speechSynthesis.speak(voice);
 
-        // Selebrasi Awal
         for(let i=0; i<12; i++) {
             setTimeout(() => {
                 createSparks(Math.random() * window.innerWidth, Math.random() * window.innerHeight, true);
@@ -180,37 +185,35 @@
         setTimeout(() => {
             document.body.innerHTML = `
                 <div class="container">
-                    <div class="card" style="border: 3px dashed var(--pink); background: rgba(255,255,255,0.15); position: relative; overflow: hidden;">
+                    <div class="card" style="border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.15); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: 10px; right: -30px; background: var(--pink); color: white; padding: 5px 40px; transform: rotate(45deg); font-size: 10px; font-weight: bold;">OFFICIAL</div>
                         
-                        <h1 style="font-size: 28px; letter-spacing: 2px;">DATE TICKET</h1>
-                        <p style="font-size: 12px; opacity: 0.8; margin-bottom: 15px;">Valid for: Aila & You 💖</p>
+                        <h1 style="font-size: 26px; letter-spacing: 2px; margin-bottom: 5px;">DATE TICKET</h1>
+                        <p style="font-size: 12px; opacity: 0.8; margin-bottom: 15px;">Valid for: Aili & You 💖</p>
                         
                         <div style="border-top: 1px dashed rgba(255,255,255,0.3); margin: 15px 0;"></div>
 
-                        <img src="https://media.tenor.com/7S_m36_as_YAAAAj/bubu-dudu-sseeyall.gif" 
-                             style="width: 130px; margin: 10px auto; display:block; border-radius: 15px;">
+                        <div style="font-size: 50px; margin: 10px 0;">🥰</div>
 
-                        <h2 style="font-size: 20px; margin-top: 15px;">Redeemed Successfully! 🥳</h2>
+                        <h2 style="font-size: 20px; margin-top: 10px;">Redeemed Successfully! 🥳</h2>
                         
                         <p style="margin: 15px 0; font-size: 14px; line-height: 1.6;">
                             Satu tiket jalan bareng sudah aktif. <br>
-                            Kabari ya kalau sudah siap! 😉
+                            Kabari ya kalau kamu udah siap, Aili! 😉
                         </p>
 
                         <div style="background: white; color: #120012; padding: 10px; border-radius: 10px; font-family: 'Courier New', monospace; font-weight: bold; margin-top: 10px;">
-                            CODE: LOVE-AILA-2024
+                            PASS: SENYUM-DULU-DONG 😜
                         </div>
 
-                        <p style="font-size: 10px; margin-top: 20px; opacity: 0.6;">*Syarat & Ketentuan: Harus Senyum Terus!*</p>
+                        <p style="font-size: 10px; margin-top: 20px; opacity: 0.6;">*Jangan lupa di-screenshot ya!*</p>
                     </div>
                 </div>
-                <div class="running"><span>🎈 Cieee yang tiketnya udah aktif! 🎈 Ditunggu ya tanggal mainnya Aila! 💘🎈</span></div>
+                <div class="running"><span>✨ Makasih ya Aili ✨ Ditunggu kabarnya ✨ Sampai ketemu nanti ✨</span></div>
             `;
             document.body.style.opacity = "1";
 
-            // Efek Balon Melayang
-            const balloonIcons = ['🎈', '🎈', '💖', '✨'];
+            const balloonIcons = ['🎈', '💖', '✨'];
             setInterval(() => {
                 const b = document.createElement("div");
                 b.className = "balloon";
@@ -229,7 +232,6 @@
         }, 500);
     };
 
-    // Hujan Hati (Background)
     setInterval(() => {
         const h = document.createElement("div");
         h.className = "heart-rain"; h.innerHTML = "💖";
