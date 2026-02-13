@@ -197,7 +197,7 @@ opening.addEventListener("click",()=>{
 });
 
 /* ===== HARD STOP AUDIO (FINAL FIX) ===== */
-function hardStopMusic(){
+/*function hardStopMusic(){
   if(!music) return;
   music.pause();
   music.currentTime = 0;
@@ -209,7 +209,20 @@ document.addEventListener("visibilitychange",()=>{
 
 window.addEventListener("pagehide", hardStopMusic);
 window.addEventListener("beforeunload", hardStopMusic);
-window.addEventListener("blur", hardStopMusic);
+window.addEventListener("blur", hardStopMusic); */
+
+/* ==== AUTO PAUSE / RESUME (FINAL FIX IOS) ==== */
+function pauseMusic(){
+  if(!music.paused) music.pause();
+}
+function resumeMusic(){
+  if(!opening.classList.contains("hide")) return;
+  music.play().catch(()=>{});
+}
+
+document.addEventListener("visibilitychange",()=>{
+  document.hidden ? pauseMusic() : resumeMusic();
+});
 
 /* ===== NO BUTTON FIX (MOBILE SAFE) ===== */
 const noBtn=document.getElementById("noBtn");
