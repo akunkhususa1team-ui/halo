@@ -26,7 +26,7 @@
 
         h1{ font-size:clamp(24px, 7vw, 32px); margin-bottom:15px; text-shadow:0 2px 10px rgba(0,0,0,0.3); }
         
-        /* PHOTO WRAPPER */
+        /* PHOTO WRAPPER - UKURAN DEFAULT BESAR */
         .photo-wrapper {
             width: 240px; height: 240px; margin: 0 auto;
             position: relative; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); z-index: 100;
@@ -36,29 +36,28 @@
             box-shadow: 0 0 25px var(--pink); cursor: pointer;
             transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        /* Mode Portrait */
         .is-portrait { width: 260px !important; height: 380px !important; }
 
-        /* ANIMATION ELEMENTS */
+        /* TEXT & BUTTON ANIMATION */
         h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; transition: all 0.5s ease; }
         .buttons { position: relative; width: 100%; height: 100px; transition: all 0.5s ease; }
         .push-down { transform: translateY(20px); }
 
-        /* BUTTONS */
+        /* BUTTONS STYLE */
         button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; position: absolute; font-weight: bold; transition: 0.2s; font-size: 16px; }
         #yesBtn { left: 10%; background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); }
         #noBtn { right: 10%; background: #444; color: white; }
 
-        /* OVERLAY DISMISS */
+        /* DISMISS OVERLAY */
         #dismiss-overlay { position: fixed; inset: 0; z-index: 50; display: none; }
 
-        /* SPARKLE */
+        /* SPARKLE & RUNNING TEXT */
         .sparkle { position: fixed; pointer-events: none; animation: fly 1s forwards cubic-bezier(0.165, 0.84, 0.44, 1); z-index: 1000; }
         @keyframes fly {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
             100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6); opacity: 0; }
         }
-
-        /* RUNNING TEXT */
         .running { background: var(--pink); padding: 12px 0; overflow: hidden; white-space: nowrap; z-index: 100; position: relative; flex-shrink: 0; }
         .running span { display: inline-block; padding-left: 100%; animation: scroll 15s linear infinite; font-weight: bold; }
         @keyframes scroll { to { transform: translateX(-100%); } }
@@ -103,7 +102,7 @@
     const music = document.getElementById("music");
     const music2 = document.getElementById("music2");
 
-    // FUNGSI TOGGLE PORTRAIT
+    // FUNGSI ZOOM & DISMISS
     function togglePortrait(show, e = null) {
         if (show) {
             wrapper.classList.add("is-portrait");
@@ -139,15 +138,22 @@
         }
     }
 
-    // OPENING - LOAD KEDUA AUDIO SEKALIGUS
-    opening.onclick = () => {
+    // OPENING - LOAD DAN JALANKAN AUDIO
+    opening.onclick = async () => {
         opening.classList.add("fade-out");
-        music.play().catch(() => {});
-        // Pancing music2 agar siap diputar (tanpa suara dulu)
-        music2.play().then(() => { music2.pause(); music2.currentTime = 0; }).catch(() => {});
+        try {
+            // Kita "pancing" music2 saat opening agar dapat izin browser
+            music2.muted = true; 
+            await music2.play();
+            music2.pause();
+            music2.muted = false;
+            music2.currentTime = 0;
+            
+            await music.play();
+        } catch (e) { console.log("Audio load error"); }
     };
 
-    // NO BUTTON FIX
+    // LOGIKA TOMBOL NO
     const noBtn = document.getElementById("noBtn");
     function moveNo() {
         const maxX = btnArea.clientWidth - noBtn.offsetWidth;
@@ -157,21 +163,21 @@
     }
     ["mouseenter", "touchstart"].forEach(evt => noBtn.addEventListener(evt, (e) => { if(evt === "touchstart") e.preventDefault(); moveNo(); }));
 
-    // YES BUTTON FIX - JAMINAN AUDIO PLAY
-    document.getElementById("yesBtn").onclick = function() {
-        // Matikan music 1 sepenuhnya
+    // LOGIKA TOMBOL YES - FIX AUDIO SWAP DEWA
+    document.getElementById("yesBtn").onclick = async function() {
+        // 1. Hentikan music 1
         music.pause();
-        music.currentTime = 0;
         
-        // Putar music 2 secara paksa
-        music2.volume = 1.0;
-        var playPromise = music2.play();
-        
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Autoplay dicegah, mencoba lagi...");
-                music2.play(); // Retry
-            });
+        // 2. Gunakan sedikit jeda agar browser memproses pause sebelum play
+        await new Promise(r => setTimeout(r, 100));
+
+        // 3. Putar music 2 secara eksplisit
+        try {
+            music2.currentTime = 0;
+            await music2.play();
+        } catch (err) {
+            // Jika gagal (jarang terjadi), pancing ulang
+            music2.play();
         }
 
         const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
