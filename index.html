@@ -32,7 +32,6 @@
         #yesBtn { background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); z-index: 1000; position: relative; }
         #noBtn { background: #444; color: white; z-index: 999; position: relative; }
 
-        /* CSS UNTUK SPARKS */
         .sparkle { position: fixed; pointer-events: none; animation: fly 1s forwards; z-index: 1000; font-size: 20px; }
         @keyframes fly {
             0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
@@ -84,7 +83,6 @@
     const music2 = document.getElementById("music2");
     const overlay = document.getElementById("dismiss-overlay");
 
-    // --- FUNGSI CREATE SPARKS (KEMBALI LAGI!) ---
     function createSparks(x, y) {
         const particles = ['✨', '⭐', '💖', '🌸', '💘'];
         for (let i = 0; i < 15; i++) {
@@ -102,12 +100,11 @@
         }
     }
 
-    // FUNGSI ZOOM & SPARKS PADA FOTO
     photo.onclick = (e) => {
         e.stopPropagation();
         const isZoomed = pWrapper.classList.toggle("is-portrait");
         overlay.style.display = isZoomed ? "block" : "none";
-        createSparks(e.clientX, e.clientY); // Munculin sparks pas klik foto
+        createSparks(e.clientX, e.clientY);
     };
 
     overlay.onclick = () => {
@@ -115,13 +112,12 @@
         overlay.style.display = "none";
     };
 
-    // FUNGSI KABUR TOMBOL NO
     function moveNo() {
         noBtn.style.position = "fixed";
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
         const maxX = window.innerWidth - btnWidth - 20;
-        const maxY = window.innerHeight - 100; 
+        const maxY = window.innerHeight - 120; // Lebih tinggi sedikit agar tidak kena Running Text
         
         const yesRect = yesBtn.getBoundingClientRect();
         const photoRect = pWrapper.getBoundingClientRect();
@@ -140,7 +136,6 @@
         }
         noBtn.style.left = newX + "px";
         noBtn.style.top = newY + "px";
-        noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
     }
 
     noBtn.addEventListener("mouseover", moveNo);
@@ -149,25 +144,38 @@
     opening.onclick = () => {
         opening.classList.add("fade-out");
         music.play().catch(() => {});
-        music2.play().then(() => { music2.pause(); music2.currentTime = 0; }).catch(() => {});
+        // Pre-load music2 agar siap saat klik Yes
+        music2.load();
     };
 
+    // LOGIKA KLIK YES (FIXED MUSIC TRANSITION)
     yesBtn.onclick = () => {
+        // 1. Pause music pertama
         music.pause();
-        music2.play();
+        music.currentTime = 0; // Kembalikan ke detik 0
+
+        // 2. Play music kedua (My Everything)
+        music2.play().catch(e => console.log("Gagal putar music2:", e));
+
+        // 3. Google Voice
         const voice = new SpeechSynthesisUtterance("Yeayyyy! Aila mau jalan sama aku hehehehe");
         voice.lang = "id-ID";
         window.speechSynthesis.speak(voice);
 
+        // 4. Update Tampilan
         document.body.style.opacity = "0";
         setTimeout(() => {
             document.body.innerHTML = `
-                <div class="container"><div class="card">
-                    <h1>YEAYYY! 💕</h1>
-                    <p style="margin:20px 0; font-size:18px;">Aila mau jalan sama aku! 😆💘</p>
-                    <p style="font-size:60px;">🥰</p>
-                </div></div>
-                <div class="running"><span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span></div>`;
+                <div class="container">
+                    <div class="card">
+                        <h1 style="color:#f0ddea">YEAYYY! 💕</h1>
+                        <p style="margin:20px 0; font-size:18px;">Aila mau jalan sama aku! 😆💘</p>
+                        <p style="font-size:60px;">🥰</p>
+                    </div>
+                </div>
+                <div class="running">
+                    <span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span>
+                </div>`;
             document.body.style.opacity = "1";
         }, 500);
     };
