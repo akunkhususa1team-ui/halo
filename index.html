@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <title>Untuk Aila 💘</title>
 
 <style>
 :root{
   --pink:#ff3d7f;
+  --soft:#ff8fb1;
   --dark:#120012;
-  --soft:#ff7aa8;
 }
 
 *{
@@ -22,13 +22,15 @@
 html,body{
   width:100%;
   height:100%;
-  overflow:hidden;
+  overflow-x:hidden;
   font-family:"Segoe UI",Arial,sans-serif;
 }
 
 body{
   background:radial-gradient(circle at top,var(--soft),var(--dark));
   color:white;
+  display:grid;
+  place-items:center;
 }
 
 /* OPENING */
@@ -36,10 +38,9 @@ body{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.65);
-  backdrop-filter:blur(12px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  backdrop-filter:blur(14px);
+  display:grid;
+  place-items:center;
   font-size:clamp(18px,4vw,28px);
   cursor:pointer;
   z-index:999;
@@ -51,34 +52,36 @@ body{
   pointer-events:none;
 }
 
-/* MAIN */
+/* MAIN CONTAINER */
 .container{
+  width:100%;
+  max-width:420px;
   min-height:100svh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
+  display:grid;
+  place-items:center;
   padding:24px;
   text-align:center;
+  position:relative;
 }
 
 .container::before{
   content:"";
   position:absolute;
-  width:min(70vw,500px);
-  height:min(70vw,500px);
+  width:320px;
+  height:320px;
   background:radial-gradient(circle,rgba(255,80,130,.6),transparent);
   filter:blur(90px);
   z-index:-1;
 }
 
+/* TEXT */
 h1{
-  font-size:clamp(22px,5vw,36px);
+  font-size:clamp(22px,6vw,36px);
   margin-bottom:8px;
 }
 
 h2{
-  font-size:clamp(16px,4vw,22px);
+  font-size:clamp(16px,4.5vw,22px);
   font-weight:400;
   margin-bottom:20px;
 }
@@ -93,13 +96,16 @@ h2{
   margin:16px 0 24px;
 }
 
-/* BUTTONS */
+/* BUTTON AREA */
 .buttons{
   position:relative;
-  width:min(90vw,320px);
+  width:100%;
+  max-width:320px;
   height:120px;
+  margin:auto;
 }
 
+/* BUTTON */
 button{
   padding:14px 26px;
   font-size:clamp(14px,4vw,18px);
@@ -107,7 +113,8 @@ button{
   border-radius:14px;
   cursor:pointer;
   position:absolute;
-  transition:.2s;
+  transition:.15s;
+  touch-action:none;
 }
 
 #yesBtn{
@@ -164,10 +171,10 @@ button{
 
 <div class="container" id="main">
   <h1>Untuk Aila 💖</h1>
-  <img src="foto.jpg" class="photo" />
+  <img src="foto.jpg" class="photo">
   <h2>Mau jadi Valentine aku nggak? 🥺</h2>
 
-  <div class="buttons">
+  <div class="buttons" id="area">
     <button id="yesBtn">Yes 😍</button>
     <button id="noBtn">No 😜</button>
   </div>
@@ -198,21 +205,26 @@ opening.onclick=()=>{
   },100);
 };
 
-/* NO BUTTON FIX (TIDAK BISA DIKLIK) */
+/* NO BUTTON – MOBILE & DESKTOP FIX */
 const noBtn=document.getElementById("noBtn");
-const area=document.querySelector(".buttons");
+const area=document.getElementById("area");
 
 function moveNo(){
   const maxX=area.clientWidth-noBtn.offsetWidth;
   const maxY=area.clientHeight-noBtn.offsetHeight;
-  noBtn.style.left=Math.random()*maxX+"px";
-  noBtn.style.top=Math.random()*maxY+"px";
+
+  const x=Math.random()*maxX;
+  const y=Math.random()*maxY;
+
+  noBtn.style.left=x+"px";
+  noBtn.style.top=y+"px";
 }
 
-noBtn.addEventListener("mouseenter",moveNo);
-noBtn.addEventListener("touchstart",e=>{
-  e.preventDefault();
-  moveNo();
+["mouseenter","touchstart","pointerdown"].forEach(evt=>{
+  noBtn.addEventListener(evt,e=>{
+    e.preventDefault();
+    moveNo();
+  });
 });
 
 /* HEART */
@@ -226,16 +238,17 @@ setInterval(()=>{
   setTimeout(()=>h.remove(),5000);
 },350);
 
-/* YES CLICK */
+/* YES */
 document.getElementById("yesBtn").onclick=()=>{
-  // AI suara
-  const msg=new SpeechSynthesisUtterance("Yeay! Aila resmi jadi Valentine aku");
-  msg.lang="id-ID";
-  msg.rate=0.95;
-  msg.pitch=1.2;
-  speechSynthesis.speak(msg);
+  const voice=new SpeechSynthesisUtterance(
+    "Yeay! Aila resmi jadi Valentine aku"
+  );
+  voice.lang="id-ID";
+  voice.pitch=1.2;
+  voice.rate=0.95;
+  speechSynthesis.speak(voice);
 
-  document.body.style.transition="opacity 1.2s ease";
+  document.body.style.transition="opacity 1.2s";
   document.body.style.opacity="0";
 
   setTimeout(()=>{
