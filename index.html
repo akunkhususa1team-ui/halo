@@ -175,16 +175,51 @@ button{
   <span>💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine yang tidak merayakan aku tidak merayakan valentinenya  💘 ini cuma iseng iseng bikin gini an wkwk 💘</span>
 </div>
 
-<audio id="music" loop preload="none">
+<!-- AUDIO -->
+<audio id="music" preload="none">
   <source src="Timur.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="music2" preload="none">
+  <source src="MyEverything.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 const opening = document.getElementById("opening");
 const music   = document.getElementById("music");
+const music2 = document.getElementById("music2");
 
-/* ===== PLAY MUSIC (AMAN iOS / IG) ===== */
-opening.addEventListener("click",()=>{
+/* PLAY OPENING */
+opening.onclick=()=>{
+  opening.classList.add("fade-out");
+  music.volume=0;
+  music.play().catch(()=>{});
+  let v=0;
+  const fade=setInterval(()=>{
+    v+=0.05;
+    music.volume=v;
+    if(v>=1) clearInterval(fade);
+  },100);
+};
+
+/* STOP ALL MUSIC */
+function stopAll(){
+  [music,music2].forEach(m=>{
+    if(!m) return;
+    m.pause();
+    m.currentTime=0;
+  });
+}
+
+document.addEventListener("visibilitychange",()=>{
+  if(document.hidden) stopAll(); 
+});
+window.addEventListener("pagehide",stopAll);
+window.addEventListener("beforeunload",stopAll);
+window.addEventListener("blur",stopAll);
+  
+ /* ===== PLAY MUSIC (AMAN iOS / IG) ===== */
+/*opening.addEventListener("click",()=>{
   opening.classList.add("fade-out");
   music.volume = 0;
   music.play().catch(()=>{});
@@ -194,7 +229,7 @@ opening.addEventListener("click",()=>{
     music.volume=v;
     if(v>=1) clearInterval(fade);
   },100);
-});
+}); */
 
 /* ===== HARD STOP AUDIO (FINAL FIX) ===== */
 /*function hardStopMusic(){
@@ -212,7 +247,7 @@ window.addEventListener("beforeunload", hardStopMusic);
 window.addEventListener("blur", hardStopMusic); */
 
 /* ==== AUTO PAUSE / RESUME (FINAL FIX IOS) ==== */
-function pauseMusic(){
+/*function pauseMusic(){
   if(!music.paused) music.pause();
 }
 function resumeMusic(){
@@ -222,7 +257,7 @@ function resumeMusic(){
 
 document.addEventListener("visibilitychange",()=>{
   document.hidden ? pauseMusic() : resumeMusic();
-});
+}); */
 
 /* ===== NO BUTTON FIX (MOBILE SAFE) ===== */
 const noBtn=document.getElementById("noBtn");
@@ -255,9 +290,12 @@ setInterval(()=>{
 
 /* ===== YES CLICK ===== */
 document.getElementById("yesBtn").onclick=()=>{
+
+  music2.volume=1;
+  music2.play().catch(()=>{});
+
   const voice=new SpeechSynthesisUtterance(
-    "Yeayyyy! Aila mau jalan sama aku hehehehe"
-  );
+    "Yeayyyy! Aila mau jalan sama aku hehehehe");
   voice.lang="id-ID";
   voice.rate=.95;
   voice.pitch=1.2;
