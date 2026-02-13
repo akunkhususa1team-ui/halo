@@ -1,95 +1,348 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    <link rel="stylesheet" href="./style.css">
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine 💘</title>
+
+<title>Aila 💘 Cinematic</title>
 
 <style>
-body {
-    background: #ffdde1;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    padding-top: 80px;
+
+/* ===== BACKGROUND FOTO + BLUR ===== */
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  text-align:center;
+  overflow:hidden;
+  color:white;
 }
 
-h1 {
-    color: #ff3366;
-    font-size: 28px;
+#bg{
+  position:fixed;
+  inset:0;
+  background:
+    linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
+    url("background.jpg") center/cover no-repeat;
+  filter:blur(6px);
+  transform:scale(1.1);
+  z-index:-2;
 }
 
-.buttons {
-    margin-top: 40px;
-    position: relative;
+/* ===== SPOTLIGHT ===== */
+#spotlight{
+  position:fixed;
+  inset:0;
+  background:radial-gradient(circle at center,
+    rgba(255,255,255,0.25),
+    rgba(0,0,0,0.7));
+  z-index:-1;
 }
 
-button {
-    padding: 12px 25px;
-    font-size: 18px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    margin: 10px;
+/* ===== INTRO SLOW MOTION ===== */
+#intro{
+  position:fixed;
+  inset:0;
+  background:black;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  cursor:pointer;
+  animation:fadeIntro 2s infinite alternate;
+  z-index:999;
 }
 
-#yesBtn {
-    background: #ff3366;
-    color: white;
+@keyframes fadeIntro{
+  from{opacity:0.7}
+  to{opacity:1}
 }
 
-#noBtn {
-    background: #666;
-    color: white;
-    position: absolute;
+/* ===== MAIN ===== */
+#main{
+  display:none;
+  padding:80px 20px 120px;
+  animation:slowZoom 1.5s ease;
 }
+
+@keyframes slowZoom{
+  from{transform:scale(1.5);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+/* ===== JUDUL ===== */
+h1{
+  text-shadow:0 0 40px #ff66aa;
+}
+
+/* ===== BUTTON ===== */
+.buttons{
+  margin-top:40px;
+  position:relative;
+  height:150px;
+}
+
+button{
+  padding:14px 28px;
+  font-size:18px;
+  border:none;
+  border-radius:15px;
+  cursor:pointer;
+  margin:10px;
+  background:#ff3366;
+  color:white;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.2);
+  box-shadow:0 0 30px #ff66aa;
+}
+
+#noBtn{
+  background:#333;
+  position:absolute;
+}
+
+/* ===== RUNNING TEXT ===== */
+.running{
+  position:fixed;
+  bottom:0;
+  width:100%;
+  background:#ff3366;
+  white-space:nowrap;
+  overflow:hidden;
+}
+
+.running span{
+  display:inline-block;
+  padding-left:100%;
+  animation:scroll 10s linear infinite;
+}
+
+@keyframes scroll{
+  from{transform:translateX(0)}
+  to{transform:translateX(-100%)}
+}
+
+/* ===== 3D NAME ===== */
+#aila3d{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:70px;
+  font-weight:bold;
+  color:#ff66aa;
+  text-shadow:0 0 60px #ff99cc;
+  opacity:0;
+  pointer-events:none;
+}
+
+.showName{
+  animation:nameCinema 3s ease forwards;
+}
+
+@keyframes nameCinema{
+  0%{transform:scale(0.2) rotateX(80deg);opacity:0}
+  40%{opacity:1}
+  70%{transform:scale(1.2)}
+  100%{transform:scale(1);opacity:0}
+}
+
+/* ===== HEART ===== */
+.heart{
+  position:fixed;
+  top:-10px;
+  font-size:22px;
+  animation:fall linear forwards;
+}
+
+@keyframes fall{
+  to{transform:translateY(100vh);opacity:0}
+}
+
+/* ===== SPARKLE ===== */
+.spark{
+  position:fixed;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:white;
+  animation:spark 1.5s linear forwards;
+}
+
+@keyframes spark{
+  to{transform:translateY(100vh) scale(0);opacity:0}
+}
+
+/* ===== PLAYER ===== */
+.player{
+  position:fixed;
+  top:10px;
+  right:10px;
+  background:rgba(0,0,0,0.4);
+  padding:10px;
+  border-radius:15px;
+}
+
 </style>
 </head>
 
 <body>
 
+<div id="bg"></div>
+<div id="spotlight"></div>
+
+<div id="intro">
+🎬 Klik untuk mulai cinematic surprise 💘
+</div>
+
+<div id="main">
+
 <h1>Mau jadi Valentine aku nggak? 💖🥺</h1>
 
 <div class="buttons">
-    <button id="yesBtn" onclick="yesClicked()">Yes 😍</button>
-    <button id="noBtn">No 😜</button>
+<button onclick="yesClicked()">Yes 😍</button>
+<button id="noBtn">No 😜</button>
 </div>
 
+<div class="running">
+<span>💘 Kamu spesial banget buat aku Aila 💘</span>
+</div>
+
+<div class="player">
+<button onclick="toggleMusic()">⏯</button>
+<button onclick="nextSong()">⏭</button>
+</div>
+
+</div>
+
+<div id="aila3d">Aila</div>
+
+<audio id="music"></audio>
+
 <script>
-const noBtn = document.getElementById("noBtn");
 
-noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * window.innerWidth * 0.6;
-    const y = Math.random() * window.innerHeight * 0.6;
+/* ===== NAMA ===== */
+const nama="Aila";
 
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
+/* AI VOICE */
+function speak(){
+  const msg=new SpeechSynthesisUtterance(
+    `Hai ${nama}, ini spesial buat kamu`
+  );
+  msg.lang="id-ID";
+  speechSynthesis.speak(msg);
+}
+
+/* PLAYLIST */
+const playlist=["lagu1.mp3","lagu2.mp3","lagu3.mp3"];
+let index=Math.floor(Math.random()*playlist.length);
+const music=document.getElementById("music");
+
+function fadeIn(){
+  music.volume=0;
+  let v=0;
+  const f=setInterval(()=>{
+    if(v<1){v+=0.05;music.volume=v}
+    else clearInterval(f);
+  },100);
+}
+
+function playSong(){
+  music.src=playlist[index];
+  music.play();
+  fadeIn();
+}
+
+/* 3D NAME */
+function showName(){
+  const el=document.getElementById("aila3d");
+  el.classList.add("showName");
+  setTimeout(()=>el.classList.remove("showName"),3000);
+}
+
+/* INTRO CLICK */
+document.getElementById("intro").onclick=()=>{
+  document.getElementById("intro").style.display="none";
+  document.getElementById("main").style.display="block";
+  playSong();
+  speak();
+  showName();
+};
+
+/* PLAYER */
+function toggleMusic(){
+  music.paused?music.play():music.pause();
+}
+
+function nextSong(){
+  index=(index+1)%playlist.length;
+  playSong();
+}
+
+/* NO BUTTON */
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseover",()=>{
+  noBtn.style.left=Math.random()*(window.innerWidth-150)+"px";
+  noBtn.style.top=Math.random()*(window.innerHeight-250)+"px";
 });
 
-function yesClicked() {
-    document.body.innerHTML = `
-        <h1 style="color:#ff3366">
-        YEAYYY 💕<br>
-        Date kita resmi! 😆💘
-        </h1>
-    `;
+/* HEART RAIN */
+setInterval(()=>{
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💖";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(Math.random()*2+3)+"s";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),5000);
+},250);
+
+/* SPARKLE */
+setInterval(()=>{
+  const s=document.createElement("div");
+  s.className="spark";
+  s.style.left=Math.random()*100+"vw";
+  document.body.appendChild(s);
+  setTimeout(()=>s.remove(),1500);
+},120);
+
+/* YES EXPLOSION */
+function yesClicked(){
+
+  document.body.style.transition="1s";
+  document.body.style.transform="scale(1.1)";
+
+  for(let i=0;i<150;i++){
+    const h=document.createElement("div");
+    h.innerHTML="💖";
+    h.style.position="fixed";
+    h.style.left="50%";
+    h.style.top="50%";
+    h.style.fontSize="26px";
+    h.style.transition="2s";
+    document.body.appendChild(h);
+
+    setTimeout(()=>{
+      h.style.transform=`translate(${(Math.random()-0.5)*900}px,
+      ${(Math.random()-0.5)*900}px)`;
+      h.style.opacity=0;
+    },10);
+
+    setTimeout(()=>h.remove(),2000);
+  }
+
+  setTimeout(()=>{
+    document.body.innerHTML=`
+    <h1 style="margin-top:120px">
+    YEAYYY 💕<br>${nama} resmi jadi Valentine aku! 😆💘
+    </h1>`;
+  },1500);
 }
+
 </script>
 
 </body>
-</html>
-    <script  src="./script.js"></script>
-
-  </body>
-  
 </html>
