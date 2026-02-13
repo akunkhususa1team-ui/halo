@@ -4,342 +4,233 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Aila 💘 Cinematic</title>
+<title>For Aila 💘</title>
 
 <style>
-
-/* ===== BACKGROUND FOTO + BLUR ===== */
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  text-align:center;
-  overflow:hidden;
-  color:white;
+margin:0;
+font-family:Arial;
+background:#0b0b12;
+overflow:hidden;
+color:white;
+text-align:center;
 }
 
-#bg{
-  position:fixed;
-  inset:0;
-  background:
-    linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)),
-    url("background.jpg") center/cover no-repeat;
-  filter:blur(6px);
-  transform:scale(1.1);
-  z-index:-2;
+/* Background cinematic */
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+background:radial-gradient(circle,#ff3c78,#0b0b12 70%);
+filter:blur(80px);
+z-index:-1;
+animation:pulse 6s infinite alternate;
 }
 
-/* ===== SPOTLIGHT ===== */
-#spotlight{
-  position:fixed;
-  inset:0;
-  background:radial-gradient(circle at center,
-    rgba(255,255,255,0.25),
-    rgba(0,0,0,0.7));
-  z-index:-1;
+@keyframes pulse{
+from{opacity:.6;}
+to{opacity:1;}
 }
 
-/* ===== INTRO SLOW MOTION ===== */
-#intro{
-  position:fixed;
-  inset:0;
-  background:black;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:28px;
-  cursor:pointer;
-  animation:fadeIntro 2s infinite alternate;
-  z-index:999;
+/* Spotlight */
+.spotlight{
+position:fixed;
+top:50%;
+left:50%;
+width:350px;
+height:350px;
+background:radial-gradient(circle,rgba(255,255,255,.3),transparent 70%);
+transform:translate(-50%,-50%);
+border-radius:50%;
+animation:spot 4s infinite alternate;
 }
 
-@keyframes fadeIntro{
-  from{opacity:0.7}
-  to{opacity:1}
+@keyframes spot{
+to{transform:translate(-50%,-50%) scale(1.4);}
 }
 
-/* ===== MAIN ===== */
-#main{
-  display:none;
-  padding:80px 20px 120px;
-  animation:slowZoom 1.5s ease;
+/* FOTO CINEMATIC */
+.photo{
+margin-top:40px;
+width:220px;
+height:220px;
+border-radius:20px;
+object-fit:cover;
+box-shadow:
+0 0 30px #ff3c78,
+0 0 60px #ff3c78;
+animation:zoom 6s infinite alternate;
 }
 
-@keyframes slowZoom{
-  from{transform:scale(1.5);opacity:0}
-  to{transform:scale(1);opacity:1}
+@keyframes zoom{
+from{transform:scale(1);}
+to{transform:scale(1.1);}
 }
 
-/* ===== JUDUL ===== */
+/* Judul */
 h1{
-  text-shadow:0 0 40px #ff66aa;
+margin-top:40px;
+font-size:36px;
+text-shadow:0 0 20px #ff3c78;
 }
 
-/* ===== BUTTON ===== */
+.name{
+font-size:60px;
+font-weight:bold;
+animation:cinema 2s forwards;
+opacity:0;
+}
+
+@keyframes cinema{
+to{opacity:1;transform:scale(1.1);}
+}
+
+/* Buttons */
 .buttons{
-  margin-top:40px;
-  position:relative;
-  height:150px;
+margin-top:20px;
+position:relative;
 }
 
 button{
-  padding:14px 28px;
-  font-size:18px;
-  border:none;
-  border-radius:15px;
-  cursor:pointer;
-  margin:10px;
-  background:#ff3366;
-  color:white;
-  transition:0.3s;
+padding:14px 28px;
+font-size:18px;
+border:none;
+border-radius:12px;
+cursor:pointer;
+margin:10px;
 }
 
-button:hover{
-  transform:scale(1.2);
-  box-shadow:0 0 30px #ff66aa;
+#yesBtn{
+background:#ff3c78;
+color:white;
 }
 
 #noBtn{
-  background:#333;
-  position:absolute;
+background:#444;
+color:white;
+position:absolute;
 }
 
-/* ===== RUNNING TEXT ===== */
+/* Running text */
 .running{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:#ff3366;
-  white-space:nowrap;
-  overflow:hidden;
+position:fixed;
+bottom:0;
+width:100%;
+background:#ff3c78;
+white-space:nowrap;
+overflow:hidden;
 }
 
 .running span{
-  display:inline-block;
-  padding-left:100%;
-  animation:scroll 10s linear infinite;
+display:inline-block;
+padding-left:100%;
+animation:scroll 10s linear infinite;
 }
 
 @keyframes scroll{
-  from{transform:translateX(0)}
-  to{transform:translateX(-100%)}
+to{transform:translateX(-100%);}
 }
 
-/* ===== 3D NAME ===== */
-#aila3d{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:70px;
-  font-weight:bold;
-  color:#ff66aa;
-  text-shadow:0 0 60px #ff99cc;
-  opacity:0;
-  pointer-events:none;
-}
-
-.showName{
-  animation:nameCinema 3s ease forwards;
-}
-
-@keyframes nameCinema{
-  0%{transform:scale(0.2) rotateX(80deg);opacity:0}
-  40%{opacity:1}
-  70%{transform:scale(1.2)}
-  100%{transform:scale(1);opacity:0}
-}
-
-/* ===== HEART ===== */
+/* Hearts */
 .heart{
-  position:fixed;
-  top:-10px;
-  font-size:22px;
-  animation:fall linear forwards;
+position:fixed;
+top:-10px;
+animation:fall linear forwards;
 }
 
 @keyframes fall{
-  to{transform:translateY(100vh);opacity:0}
+to{transform:translateY(100vh);opacity:0;}
 }
-
-/* ===== SPARKLE ===== */
-.spark{
-  position:fixed;
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:white;
-  animation:spark 1.5s linear forwards;
-}
-
-@keyframes spark{
-  to{transform:translateY(100vh) scale(0);opacity:0}
-}
-
-/* ===== PLAYER ===== */
-.player{
-  position:fixed;
-  top:10px;
-  right:10px;
-  background:rgba(0,0,0,0.4);
-  padding:10px;
-  border-radius:15px;
-}
-
 </style>
 </head>
 
 <body>
 
-<div id="bg"></div>
-<div id="spotlight"></div>
+<div class="bg"></div>
+<div class="spotlight"></div>
 
-<div id="intro">
-🎬 Klik untuk mulai cinematic surprise 💘
-</div>
+<h1>Untuk</h1>
+<div class="name">Aila 💖</div>
 
-<div id="main">
-
-<h1>Mau jadi Valentine aku nggak? 💖🥺</h1>
+<img src="foto.jpg" class="photo">
 
 <div class="buttons">
-<button onclick="yesClicked()">Yes 😍</button>
+<button id="yesBtn">Yes 😍</button>
 <button id="noBtn">No 😜</button>
 </div>
 
 <div class="running">
-<span>💘 Kamu spesial banget buat aku Aila 💘</span>
+<span>💘 Aila kamu spesial banget 💘 Happy Valentine 💘</span>
 </div>
-
-<div class="player">
-<button onclick="toggleMusic()">⏯</button>
-<button onclick="nextSong()">⏭</button>
-</div>
-
-</div>
-
-<div id="aila3d">Aila</div>
 
 <audio id="music"></audio>
 
 <script>
 
-/* ===== NAMA ===== */
-const nama="Aila";
+/* Playlist */
+const playlist=[
+"Timur.mp3",
+"yungkaiblueofficialmusicvideo.mp3"
+];
 
-/* AI VOICE */
-function speak(){
-  const msg=new SpeechSynthesisUtterance(
-    `Hai ${nama}, ini spesial buat kamu`
-  );
-  msg.lang="id-ID";
-  speechSynthesis.speak(msg);
-}
-
-/* PLAYLIST */
-const playlist=["lagu1.mp3","lagu2.mp3","lagu3.mp3"];
-let index=Math.floor(Math.random()*playlist.length);
+let track=0;
 const music=document.getElementById("music");
 
-function fadeIn(){
-  music.volume=0;
-  let v=0;
-  const f=setInterval(()=>{
-    if(v<1){v+=0.05;music.volume=v}
-    else clearInterval(f);
-  },100);
+function playTrack(){
+music.src=playlist[track];
+music.play();
 }
 
-function playSong(){
-  music.src=playlist[index];
-  music.play();
-  fadeIn();
-}
-
-/* 3D NAME */
-function showName(){
-  const el=document.getElementById("aila3d");
-  el.classList.add("showName");
-  setTimeout(()=>el.classList.remove("showName"),3000);
-}
-
-/* INTRO CLICK */
-document.getElementById("intro").onclick=()=>{
-  document.getElementById("intro").style.display="none";
-  document.getElementById("main").style.display="block";
-  playSong();
-  speak();
-  showName();
+music.onended=()=>{
+track=(track+1)%playlist.length;
+playTrack();
 };
 
-/* PLAYER */
-function toggleMusic(){
-  music.paused?music.play():music.pause();
-}
+/* YES click */
+document.getElementById("yesBtn").onclick=()=>{
+playTrack();
+confetti();
+};
 
-function nextSong(){
-  index=(index+1)%playlist.length;
-  playSong();
-}
-
-/* NO BUTTON */
+/* NO kabur */
 const noBtn=document.getElementById("noBtn");
-noBtn.addEventListener("mouseover",()=>{
-  noBtn.style.left=Math.random()*(window.innerWidth-150)+"px";
-  noBtn.style.top=Math.random()*(window.innerHeight-250)+"px";
-});
+noBtn.onmouseover=()=>{
+const x=Math.random()*(window.innerWidth-100);
+const y=Math.random()*(window.innerHeight-200);
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+};
 
-/* HEART RAIN */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="💖";
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=(Math.random()*2+3)+"s";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),5000);
-},250);
+/* Hearts */
+function heart(){
+const h=document.createElement("div");
+h.className="heart";
+h.innerHTML="💖";
+h.style.left=Math.random()*100+"vw";
+h.style.fontSize=Math.random()*20+20+"px";
+h.style.animationDuration=(Math.random()*3+2)+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),5000);
+}
+setInterval(heart,300);
 
-/* SPARKLE */
-setInterval(()=>{
-  const s=document.createElement("div");
-  s.className="spark";
-  s.style.left=Math.random()*100+"vw";
-  document.body.appendChild(s);
-  setTimeout(()=>s.remove(),1500);
-},120);
-
-/* YES EXPLOSION */
-function yesClicked(){
-
-  document.body.style.transition="1s";
-  document.body.style.transform="scale(1.1)";
-
-  for(let i=0;i<150;i++){
-    const h=document.createElement("div");
-    h.innerHTML="💖";
-    h.style.position="fixed";
-    h.style.left="50%";
-    h.style.top="50%";
-    h.style.fontSize="26px";
-    h.style.transition="2s";
-    document.body.appendChild(h);
-
-    setTimeout(()=>{
-      h.style.transform=`translate(${(Math.random()-0.5)*900}px,
-      ${(Math.random()-0.5)*900}px)`;
-      h.style.opacity=0;
-    },10);
-
-    setTimeout(()=>h.remove(),2000);
-  }
-
-  setTimeout(()=>{
-    document.body.innerHTML=`
-    <h1 style="margin-top:120px">
-    YEAYYY 💕<br>${nama} resmi jadi Valentine aku! 😆💘
-    </h1>`;
-  },1500);
+/* Confetti */
+function confetti(){
+for(let i=0;i<80;i++){
+const c=document.createElement("div");
+c.style.position="fixed";
+c.style.width="8px";
+c.style.height="8px";
+c.style.background=`hsl(${Math.random()*360},100%,50%)`;
+c.style.left=Math.random()*100+"vw";
+c.style.top="-10px";
+c.style.transition="transform 2s linear";
+document.body.appendChild(c);
+setTimeout(()=>{
+c.style.transform="translateY(100vh) rotate(720deg)";
+},10);
+setTimeout(()=>c.remove(),2000);
+}
 }
 
 </script>
