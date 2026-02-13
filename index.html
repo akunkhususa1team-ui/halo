@@ -204,12 +204,14 @@ opening.onclick=()=>{
 
 /* STOP ALL MUSIC */
 function stopAll(){
+  if(!allowStop) return;
   [music,music2].forEach(m=>{
     if(!m) return;
     m.pause();
     m.currentTime=0;
   });
 }
+
 
 document.addEventListener("visibilitychange",()=>{
   if(document.hidden) stopAll(); 
@@ -290,6 +292,11 @@ setInterval(()=>{
 
 /* ===== YES CLICK ===== */
 document.getElementById("yesBtn").onclick=()=>{
+
+  allowStop = false; // ⬅️ INI KUNCI NYA
+
+  music.pause();
+  music.currentTime = 0;
 
   music2.volume=1;
   music2.play().catch(()=>{});
