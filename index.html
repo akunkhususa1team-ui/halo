@@ -6,113 +6,161 @@
 <title>Untuk Aila 💘</title>
 
 <style>
+:root{
+  --pink-main:#ff5c8a;
+  --pink-soft:#ff9bb5;
+  --dark-bg:#2b0a1f;
+}
+
 *{margin:0;padding:0;box-sizing:border-box}
 
 body{
-  font-family:Arial, sans-serif;
-  height:100vh;
+  font-family:"Segoe UI",Arial,sans-serif;
+  min-height:100vh;
   overflow:hidden;
-  background:radial-gradient(circle,#ff2f6d,#120012);
   color:white;
   text-align:center;
+  background:linear-gradient(120deg,var(--pink-soft),var(--dark-bg));
+  background-size:200% 200%;
+  animation:bgMove 12s ease infinite;
+  transition:opacity 1.2s ease;
 }
 
-/* Opening */
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* OPENING */
 #opening{
   position:fixed;
   inset:0;
-  backdrop-filter:blur(10px);
   background:rgba(0,0,0,.6);
+  backdrop-filter:blur(10px);
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:28px;
+  font-size:clamp(20px,4vw,28px);
   cursor:pointer;
   z-index:999;
   transition:opacity 1s;
 }
-
 .fade-out{opacity:0;pointer-events:none}
 
-/* Main */
+/* MAIN */
 .container{
-  position:absolute;
-  inset:0;
+  position:relative;
+  max-width:420px;
+  margin:auto;
+  padding:24px;
+  height:100vh;
   display:flex;
   flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
 }
 
 .container::before{
   content:"";
   position:absolute;
-  width:600px;
-  height:600px;
-  background:radial-gradient(circle,rgba(255,80,130,.6),transparent);
-  filter:blur(80px);
+  width:480px;
+  height:480px;
+  background:radial-gradient(circle,rgba(255,120,160,.5),transparent 70%);
+  filter:blur(90px);
   z-index:-1;
 }
 
 .photo{
-  width:220px;
-  height:220px;
-  border-radius:20px;
+  width:clamp(160px,45vw,220px);
+  height:clamp(160px,45vw,220px);
+  border-radius:22px;
   object-fit:cover;
-  box-shadow:0 0 40px #ff3d7f;
+  box-shadow:0 0 35px rgba(255,92,138,.7);
   margin:20px 0;
 }
 
-/* Buttons */
+h1{font-size:clamp(22px,5vw,30px)}
+h2{font-size:clamp(18px,4.5vw,22px);font-weight:500}
+
+/* BUTTONS */
 .buttons{
   position:relative;
-  width:320px;
+  width:100%;
+  max-width:320px;
   height:120px;
+  margin-top:18px;
 }
 
 button{
-  padding:14px 30px;
-  font-size:18px;
+  padding:14px 28px;
+  font-size:16px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   cursor:pointer;
   position:absolute;
-  transition:.2s;
+  box-shadow:0 8px 18px rgba(0,0,0,.3);
 }
 
-#yesBtn{background:#ff3d7f;left:20px}
-#noBtn{background:#555;right:20px}
+#yesBtn{
+  background:linear-gradient(135deg,var(--pink-main),var(--pink-soft));
+  left:10px;
+  animation:glow 2s ease-in-out infinite;
+}
 
-/* Running text */
+@keyframes glow{
+  0%,100%{box-shadow:0 0 18px rgba(255,92,138,.6)}
+  50%{box-shadow:0 0 32px rgba(255,92,138,1)}
+}
+
+#noBtn{background:#555;right:10px}
+
+/* RUNNING TEXT */
 .running{
   position:fixed;
   bottom:0;
   width:100%;
-  background:#ff3d7f;
+  background:linear-gradient(90deg,var(--pink-main),var(--pink-soft));
   white-space:nowrap;
   overflow:hidden;
+  padding:6px 0;
 }
 
 .running span{
   display:inline-block;
   padding-left:100%;
   animation:scroll 10s linear infinite;
+  font-size:14px;
 }
 
-@keyframes scroll{
-  to{transform:translateX(-100%)}
-}
+@keyframes scroll{to{transform:translateX(-100%)}}
 
-/* Hearts */
+/* HEARTS */
 .heart{
   position:fixed;
   top:-10px;
   font-size:22px;
   animation:fall linear forwards;
 }
+@keyframes fall{to{transform:translateY(100vh);opacity:0}}
 
-@keyframes fall{
-  to{transform:translateY(100vh);opacity:0}
+/* CONFETTI */
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:8px;
+  height:14px;
+  background:var(--pink-main);
+  animation:confettiFall linear forwards;
+}
+@keyframes confettiFall{
+  to{transform:translateY(100vh) rotate(360deg);opacity:0}
+}
+
+/* FADE IN */
+@keyframes fadeIn{
+  from{opacity:0;transform:scale(.95)}
+  to{opacity:1;transform:scale(1)}
 }
 </style>
 </head>
@@ -121,7 +169,7 @@ button{
 
 <div id="opening">✨ Klik untuk mulai ✨</div>
 
-<div class="container" id="main">
+<div class="container">
   <h1>Untuk Aila 💖</h1>
   <img src="foto.jpg" class="photo">
   <h2>Mau jadi Valentine aku nggak? 🥺</h2>
@@ -136,36 +184,52 @@ button{
   <span>💘 Aila kamu spesial banget 💘 Happy Valentine 💘</span>
 </div>
 
-<!-- Audio -->
 <audio id="music" loop>
   <source src="Timur.mp3">
 </audio>
-
 <audio id="clickSound">
   <source src="click.mp3">
 </audio>
 
 <script>
-const opening = document.getElementById("opening");
-const music = document.getElementById("music");
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const clickSound = document.getElementById("clickSound");
+const opening=document.getElementById("opening");
+const music=document.getElementById("music");
+const noBtn=document.getElementById("noBtn");
+const yesBtn=document.getElementById("yesBtn");
+const clickSound=document.getElementById("clickSound");
+
+/* MUSIC FADE IN */
+function fadeInMusic(){
+  music.volume=0;
+  music.play().catch(()=>{});
+  let v=0;
+  const i=setInterval(()=>{
+    v+=0.05;
+    if(v>=1){music.volume=1;clearInterval(i)}
+    music.volume=v;
+  },200);
+}
 
 /* OPENING */
-opening.onclick = () => {
+opening.onclick=()=>{
   opening.classList.add("fade-out");
-  music.play().catch(()=>{});
+  fadeInMusic();
 };
 
-/* NO BUTTON KABUR */
-noBtn.addEventListener("mouseover",()=>{
-  noBtn.style.left = Math.random()*240 + "px";
-  noBtn.style.top  = Math.random()*80 + "px";
+/* NO BUTTON ANTI KLIK */
+function moveNo(){
+  noBtn.style.left=Math.random()*200+"px";
+  noBtn.style.top=Math.random()*70+"px";
+}
+["mouseover","mousedown","touchstart","click"].forEach(e=>{
+  noBtn.addEventListener(e,(ev)=>{
+    ev.preventDefault();
+    moveNo();
+  });
 });
 
 /* HEART RAIN */
-function heart(){
+setInterval(()=>{
   const h=document.createElement("div");
   h.className="heart";
   h.innerHTML="💖";
@@ -173,29 +237,53 @@ function heart(){
   h.style.animationDuration=(Math.random()*2+3)+"s";
   document.body.appendChild(h);
   setTimeout(()=>h.remove(),5000);
+},350);
+
+/* CONFETTI */
+function confetti(){
+  for(let i=0;i<40;i++){
+    const c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=Math.random()>0.5?"#ff5c8a":"#ff9bb5";
+    c.style.animationDuration=(Math.random()*2+2)+"s";
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
 }
-setInterval(heart,300);
 
 /* YES CLICK */
 yesBtn.onclick=()=>{
-  clickSound.currentTime=0;
   clickSound.play().catch(()=>{});
-
-  document.body.style.transition="1s";
+  confetti();
   document.body.style.opacity="0";
 
   setTimeout(()=>{
     document.body.innerHTML=`
-      <h1 style="margin-top:120px;font-size:40px;color:#ff3d7f">
-        YEAYYY 💕<br>
-        Aila resmi jadi Valentine aku 😆💘
+      <h1 id="typing" style="
+        margin-top:35vh;
+        font-size:clamp(26px,6vw,40px);
+        color:var(--pink-main);
+        animation:fadeIn 1.2s ease forwards">
       </h1>
       <div class="running">
         <span>💖 Aku seneng banget sama kamu 💖</span>
       </div>
+      <audio autoplay loop>
+        <source src="Timur.mp3">
+      </audio>
     `;
     document.body.style.opacity="1";
-  },1000);
+
+    const text="YEAYYY 💕\nAila resmi jadi Valentine aku 😆💘";
+    let i=0;
+    const el=document.getElementById("typing");
+    const t=setInterval(()=>{
+      el.innerHTML+=text[i]==="\n"?"<br>":text[i];
+      i++;
+      if(i>=text.length)clearInterval(t);
+    },60);
+  },1200);
 };
 </script>
 
