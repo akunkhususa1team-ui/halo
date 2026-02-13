@@ -21,22 +21,22 @@
             position: relative; z-index: 100;
         }
 
-        .photo-wrapper { width: 180px; height: 180px; margin: 0 auto; position: relative; z-index: 110; transition: 0.5s; }
+        .photo-wrapper { width: 180px; height: 180px; margin: 0 auto; position: relative; z-index: 110; transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .photo { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 0 25px var(--pink); cursor: pointer; }
         .is-portrait { width: 240px !important; height: 320px !important; }
 
         h2#question { font-size: 18px; font-weight: 400; margin: 20px 0; }
         .buttons { position: relative; width: 100%; height: 80px; display: flex; justify-content: center; align-items: center; gap: 20px; }
 
-        button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; touch-action: manipulation; transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
+        button { padding: 12px 25px; border-radius: 15px; border: none; cursor: pointer; font-weight: bold; font-size: 16px; touch-action: manipulation; transition: 0.2s; }
         #yesBtn { background: var(--pink); color: white; box-shadow: 0 5px 15px var(--pink); z-index: 1000; position: relative; }
-        
-        /* NO BUTTON - FIXED AGAR BISA KABUR SE-LAYAR */
-        #noBtn { 
-            background: #444; color: white; 
-            z-index: 999; 
-            position: relative; /* Awalnya normal */
+        #noBtn { background: #444; color: white; z-index: 999; position: relative; }
+
+        /* CSS UNTUK SPARKS */
+        .sparkle { position: fixed; pointer-events: none; animation: fly 1s forwards; z-index: 1000; font-size: 20px; }
+        @keyframes fly {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+            100% { transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1.6); opacity: 0; }
         }
 
         .running { background: var(--pink); padding: 12px 0; overflow: hidden; white-space: nowrap; flex-shrink: 0; position: relative; z-index: 100; }
@@ -82,57 +82,74 @@
     const opening = document.getElementById("opening");
     const music = document.getElementById("music");
     const music2 = document.getElementById("music2");
+    const overlay = document.getElementById("dismiss-overlay");
 
-    // FUNGSI KABUR (DEWA MODE)
+    // --- FUNGSI CREATE SPARKS (KEMBALI LAGI!) ---
+    function createSparks(x, y) {
+        const particles = ['✨', '⭐', '💖', '🌸', '💘'];
+        for (let i = 0; i < 15; i++) {
+            const s = document.createElement('div');
+            s.className = 'sparkle';
+            s.innerHTML = particles[Math.floor(Math.random() * particles.length)];
+            s.style.left = x + 'px'; 
+            s.style.top = y + 'px';
+            const angle = Math.random() * Math.PI * 2;
+            const dist = Math.random() * 100 + 50;
+            s.style.setProperty('--x', Math.cos(angle) * dist + 'px');
+            s.style.setProperty('--y', Math.sin(angle) * dist + 'px');
+            document.body.appendChild(s);
+            setTimeout(() => s.remove(), 1000);
+        }
+    }
+
+    // FUNGSI ZOOM & SPARKS PADA FOTO
+    photo.onclick = (e) => {
+        e.stopPropagation();
+        const isZoomed = pWrapper.classList.toggle("is-portrait");
+        overlay.style.display = isZoomed ? "block" : "none";
+        createSparks(e.clientX, e.clientY); // Munculin sparks pas klik foto
+    };
+
+    overlay.onclick = () => {
+        pWrapper.classList.remove("is-portrait");
+        overlay.style.display = "none";
+    };
+
+    // FUNGSI KABUR TOMBOL NO
     function moveNo() {
-        noBtn.style.position = "fixed"; // Berubah jadi fixed agar bisa kabur ke seluruh layar
-        
+        noBtn.style.position = "fixed";
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
-        
-        // Batas aman layar agar tidak hilang keluar
         const maxX = window.innerWidth - btnWidth - 20;
-        const maxY = window.innerHeight - btnHeight - 80; // Sisakan ruang untuk running text
+        const maxY = window.innerHeight - 100; 
         
-        // Dapatkan posisi tombol YES & Foto untuk dihindari
         const yesRect = yesBtn.getBoundingClientRect();
         const photoRect = pWrapper.getBoundingClientRect();
-        const safeMargin = 50;
-
+        
         let newX, newY;
         let isOverlapping = true;
 
-        // Cari koordinat acak sampai nemu yang tidak menabrak element penting
         while (isOverlapping) {
             newX = Math.random() * maxX;
             newY = Math.random() * maxY;
-
-            // Cek tabrakan dengan tombol YES
-            const hitYes = (newX + btnWidth > yesRect.left - safeMargin && newX < yesRect.right + safeMargin) &&
-                           (newY + btnHeight > yesRect.top - safeMargin && newY < yesRect.bottom + safeMargin);
-            
-            // Cek tabrakan dengan FOTO
+            const hitYes = (newX + btnWidth > yesRect.left - 50 && newX < yesRect.right + 50) &&
+                           (newY + btnHeight > yesRect.top - 50 && newY < yesRect.bottom + 50);
             const hitPhoto = (newX + btnWidth > photoRect.left && newX < photoRect.right) &&
                              (newY + btnHeight > photoRect.top && newY < photoRect.bottom);
-
             if (!hitYes && !hitPhoto) isOverlapping = false;
         }
-
         noBtn.style.left = newX + "px";
         noBtn.style.top = newY + "px";
-        // Efek miring sedikit biar lucu
         noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
     }
 
     noBtn.addEventListener("mouseover", moveNo);
     noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNo(); });
 
-    // FUNGSI LAINNYA
-    photo.onclick = () => pWrapper.classList.toggle("is-portrait");
-    
     opening.onclick = () => {
         opening.classList.add("fade-out");
         music.play().catch(() => {});
+        music2.play().then(() => { music2.pause(); music2.currentTime = 0; }).catch(() => {});
     };
 
     yesBtn.onclick = () => {
@@ -150,12 +167,11 @@
                     <p style="margin:20px 0; font-size:18px;">Aila mau jalan sama aku! 😆💘</p>
                     <p style="font-size:60px;">🥰</p>
                 </div></div>
-                <div class="running"><span>💘 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span></div>`;
+                <div class="running"><span>💖 Assiiikkk seneng banget 💖💖 Senyum dikit gapapa si 😜💖</span></div>`;
             document.body.style.opacity = "1";
         }, 500);
     };
 
-    // HUJAN HATI
     setInterval(() => {
         const h = document.createElement("div");
         h.className = "heart-rain"; h.innerHTML = "💖";
