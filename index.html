@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Untuk Aila 💘</title>
 
 <style>
@@ -18,12 +17,12 @@ body{
   text-align:center;
 }
 
-/* ===== OPENING CINEMATIC ===== */
+/* Opening */
 #opening{
   position:fixed;
   inset:0;
   backdrop-filter:blur(10px);
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,.6);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -33,12 +32,9 @@ body{
   transition:opacity 1s;
 }
 
-.fade-out{
-  opacity:0;
-  pointer-events:none;
-}
+.fade-out{opacity:0;pointer-events:none}
 
-/* ===== MAIN CONTENT ===== */
+/* Main */
 .container{
   position:absolute;
   inset:0;
@@ -48,18 +44,16 @@ body{
   justify-content:center;
 }
 
-/* Spotlight */
 .container::before{
   content:"";
   position:absolute;
   width:600px;
   height:600px;
-  background:radial-gradient(circle,rgba(255,80,130,0.6),transparent);
+  background:radial-gradient(circle,rgba(255,80,130,.6),transparent);
   filter:blur(80px);
   z-index:-1;
 }
 
-/* Foto */
 .photo{
   width:220px;
   height:220px;
@@ -86,15 +80,8 @@ button{
   transition:.2s;
 }
 
-#yesBtn{
-  background:#ff3d7f;
-  left:20px;
-}
-
-#noBtn{
-  background:#555;
-  right:20px;
-}
+#yesBtn{background:#ff3d7f;left:20px}
+#noBtn{background:#555;right:20px}
 
 /* Running text */
 .running{
@@ -127,62 +114,57 @@ button{
 @keyframes fall{
   to{transform:translateY(100vh);opacity:0}
 }
-
 </style>
 </head>
 
 <body>
 
-<!-- Opening cinematic -->
 <div id="opening">✨ Klik untuk mulai ✨</div>
 
-<div class="container">
+<div class="container" id="main">
+  <h1>Untuk Aila 💖</h1>
+  <img src="foto.jpg" class="photo">
+  <h2>Mau jadi Valentine aku nggak? 🥺</h2>
 
-<h1>Untuk Aila 💖</h1>
-
-<img src="foto.jpg" class="photo">
-
-<h2>Mau jadi Valentine aku nggak? 🥺</h2>
-
-<div class="buttons">
-<button id="yesBtn">Yes 😍</button>
-<button id="noBtn">No 😜</button>
-</div>
-
+  <div class="buttons">
+    <button id="yesBtn">Yes 😍</button>
+    <button id="noBtn">No 😜</button>
+  </div>
 </div>
 
 <div class="running">
-<span>💘 Aila kamu spesial banget 💘 Happy Valentine 💘</span>
+  <span>💘 Aila kamu spesial banget 💘 Happy Valentine 💘</span>
 </div>
 
-<!-- Playlist -->
+<!-- Audio -->
 <audio id="music" loop>
   <source src="Timur.mp3">
-  <source src="yunhkaiblue.mp3">
+</audio>
+
+<audio id="clickSound">
+  <source src="click.mp3">
 </audio>
 
 <script>
+const opening = document.getElementById("opening");
+const music = document.getElementById("music");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const clickSound = document.getElementById("clickSound");
 
-/* ===== OPENING CLICK ===== */
-const opening=document.getElementById("opening");
-const music=document.getElementById("music");
-
-opening.onclick=()=>{
+/* OPENING */
+opening.onclick = () => {
   opening.classList.add("fade-out");
-  music.play();
+  music.play().catch(()=>{});
 };
 
-/* ===== NO BUTTON KABUR ===== */
-const noBtn=document.getElementById("noBtn");
-
+/* NO BUTTON KABUR */
 noBtn.addEventListener("mouseover",()=>{
-  const x=Math.random()*260;
-  const y=Math.random()*80;
-  noBtn.style.left=x+"px";
-  noBtn.style.top=y+"px";
+  noBtn.style.left = Math.random()*240 + "px";
+  noBtn.style.top  = Math.random()*80 + "px";
 });
 
-/* ===== HEART RAIN ===== */
+/* HEART RAIN */
 function heart(){
   const h=document.createElement("div");
   h.className="heart";
@@ -194,17 +176,27 @@ function heart(){
 }
 setInterval(heart,300);
 
-/* ===== YES CLICK ===== */
-document.getElementById("yesBtn").onclick=()=>{
-  document.body.innerHTML=`
-  <h1 style="margin-top:120px;font-size:40px;color:#ff3d7f">
-  YEAYYY 💕<br>Aila resmi jadi Valentine aku 😆💘
-  </h1>
-  <div class="running">
-  <span>💖 Aku seneng banget! 💖</span>
-  </div>`;
-};
+/* YES CLICK */
+yesBtn.onclick=()=>{
+  clickSound.currentTime=0;
+  clickSound.play().catch(()=>{});
 
+  document.body.style.transition="1s";
+  document.body.style.opacity="0";
+
+  setTimeout(()=>{
+    document.body.innerHTML=`
+      <h1 style="margin-top:120px;font-size:40px;color:#ff3d7f">
+        YEAYYY 💕<br>
+        Aila resmi jadi Valentine aku 😆💘
+      </h1>
+      <div class="running">
+        <span>💖 Aku seneng banget sama kamu 💖</span>
+      </div>
+    `;
+    document.body.style.opacity="1";
+  },1000);
+};
 </script>
 
 </body>
