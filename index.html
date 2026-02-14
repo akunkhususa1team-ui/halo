@@ -15,7 +15,7 @@
         .fade-out{opacity:0; pointer-events:none}
 
         /* Container & Card */
-        .container{ flex:1; display:flex; align-items:center; justify-content:center; padding:15px; z-index:10; }
+        .container{ flex:1; display:flex; align-items:center; justify-content:center; padding:15px; z-index:10; transition: opacity 0.5s; }
         .card{ 
             width:100%; max-width:380px; background:var(--card); backdrop-filter:blur(15px); 
             border-radius:30px; padding:25px 20px; text-align:center; 
@@ -28,7 +28,6 @@
         .photo { width: 100%; height: 100%; border-radius: 20px; object-fit: cover; box-shadow: 0 0 25px var(--pink); cursor: pointer; }
         .is-portrait { width: 240px !important; height: 320px !important; }
 
-        /* Info Box Styles (Space Filler) */
         .info-box { margin: 15px 0; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); text-align: left; }
         .info-item { font-size: 13px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
 
@@ -61,29 +60,31 @@
     <div id="opening">✨ Klik untuk Aili ✨</div>
     <div id="dismiss-overlay" style="position:fixed; inset:0; display:none; z-index:50;"></div>
 
-    <div class="container" id="mainCon">
-        <div class="card" id="mainCard">
-            <h1>Untuk Aili 💖</h1>
-            <div class="photo-wrapper" id="pWrapper">
-                <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aili">
-            </div>
+    <div id="app-wrapper" style="display: contents;">
+        <div class="container" id="mainCon">
+            <div class="card" id="mainCard">
+                <h1>Untuk Aili 💖</h1>
+                <div class="photo-wrapper" id="pWrapper">
+                    <img src="foto.jpg" class="photo" id="mainPhoto" alt="Aili">
+                </div>
 
-            <div class="info-box">
-                <div class="info-item">📍 <span><b>Location:</b> Secret / Your Choice</span></div>
-                <div class="info-item">📅 <span><b>Date:</b> Weekend ini?</span></div>
-                <div class="info-item">✨ <span><b>Outfit:</b> Yang bikin kamu nyaman</span></div>
-            </div>
+                <div class="info-box">
+                    <div class="info-item">📍 <span><b>Location:</b> Secret / Your Choice</span></div>
+                    <div class="info-item">📅 <span><b>Date:</b> Weekend ini?</span></div>
+                    <div class="info-item">✨ <span><b>Outfit:</b> Yang bikin kamu nyaman</span></div>
+                </div>
 
-            <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
-            <div class="buttons">
-                <button id="yesBtn">Yes 😍</button>
-                <button id="noBtn">No 😜</button>
+                <h2 id="question">Mau jalan sama aku nggak? 🥺</h2>
+                <div class="buttons">
+                    <button id="yesBtn">Yes 😍</button>
+                    <button id="noBtn">No 😜</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="running">
-        <span id="runText">💘 ini sebenernya so so an so sweet aja 💘 Happy Valentine tapi aku tidak merayakan, ini cuma iseng iseng bikin gini an wkwk 💘 Makasih udah mau buka ini 💘 Have a great day! 💘</span>
+        <div class="running" id="bottomMarquee">
+            <span id="runText">💘 Happy Valentine 💘 Makasih udah mau buka ini 💘 Have a great day! 💘</span>
+        </div>
     </div>
 
     <audio id="mainAudio" preload="auto"></audio>
@@ -96,6 +97,7 @@
     const opening = document.getElementById("opening");
     const mainAudio = document.getElementById("mainAudio");
     const overlay = document.getElementById("dismiss-overlay");
+    const appWrapper = document.getElementById("app-wrapper");
 
     const lagu1 = "Timur.mp3";
     const lagu2 = "MyEverything.mp3";
@@ -136,19 +138,9 @@
         const maxX = window.innerWidth - btnW - 20;
         const maxY = window.innerHeight - 130;
         
-        const yesRect = yesBtn.getBoundingClientRect();
-        const photoRect = pWrapper.getBoundingClientRect();
+        let nX = Math.random() * maxX;
+        let nY = Math.random() * maxY;
 
-        let nX, nY, overlap = true;
-        while (overlap) {
-            nX = Math.random() * maxX;
-            nY = Math.random() * maxY;
-            const hitYes = (nX + btnW > yesRect.left - 60 && nX < yesRect.right + 60) &&
-                           (nY + btnH > yesRect.top - 60 && nY < yesRect.bottom + 60);
-            const hitPhoto = (nX + btnW > photoRect.left && nX < photoRect.right) &&
-                             (nY + btnH > photoRect.top && nY < photoRect.bottom);
-            if (!hitYes && !hitPhoto && nX > 10 && nY > 10) overlap = false;
-        }
         noBtn.style.left = nX + "px";
         noBtn.style.top = nY + "px";
         noBtn.style.transform = `rotate(${Math.random() * 20 - 10}deg)`;
@@ -161,77 +153,75 @@
         opening.classList.add("fade-out");
         mainAudio.src = lagu1;
         mainAudio.loop = true;
-        mainAudio.play().catch(() => {});
+        mainAudio.play().catch(e => console.log("Playback error:", e));
     };
 
     yesBtn.onclick = () => {
+        // Ganti Lagu tanpa menghapus elemen audio
         mainAudio.pause();
         mainAudio.src = lagu2;
-        mainAudio.loop = true;
         mainAudio.load();
-        mainAudio.play().catch(() => mainAudio.play());
+        mainAudio.play().catch(() => {
+            // Re-try play jika gagal (safari/chrome policy)
+            setTimeout(() => mainAudio.play(), 100);
+        });
 
+        // Voice
         const voice = new SpeechSynthesisUtterance("Yeay! Tiket kencan berhasil diklaim. Sampai ketemu nanti ya, Aili!");
         voice.lang = "id-ID";
         window.speechSynthesis.speak(voice);
 
+        // Sparks
         for(let i=0; i<12; i++) {
             setTimeout(() => {
                 createSparks(Math.random() * window.innerWidth, Math.random() * window.innerHeight, true);
             }, i * 250);
         }
 
-        document.body.style.opacity = "0";
+        // Ganti Konten tanpa menghapus Audio
+        appWrapper.style.opacity = "0";
         setTimeout(() => {
-            document.body.innerHTML = `
+            appWrapper.innerHTML = `
                 <div class="container">
                     <div class="card" style="border: 2px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.15); position: relative; overflow: hidden;">
                         <div style="position: absolute; top: 10px; right: -30px; background: var(--pink); color: white; padding: 5px 40px; transform: rotate(45deg); font-size: 10px; font-weight: bold;">OFFICIAL</div>
-                        
                         <h1 style="font-size: 26px; letter-spacing: 2px; margin-bottom: 5px;">DATE TICKET</h1>
                         <p style="font-size: 12px; opacity: 0.8; margin-bottom: 15px;">Valid for: Aili & Hafizh 💖</p>
-                        
                         <div style="border-top: 1px dashed rgba(255,255,255,0.3); margin: 15px 0;"></div>
-
                         <div style="font-size: 50px; margin: 10px 0;">🥰</div>
-
                         <h2 style="font-size: 20px; margin-top: 10px;">🥳 Redeemed Successfully! 🥳</h2>
-                        
-                        <p style="margin: 15px 0; font-size: 14px; line-height: 1.6;">
-                            Satu tiket jalan bareng sudah aktif. <br>
-                            Kabari ya kalau kamu udah siap, Aili!
-                        </p>
-
-                        <div style="background: white; color: #120012; padding: 10px; border-radius: 10px; font-family: 'Courier New', monospace; font-weight: bold; margin-top: 10px;">
-                            CODE: DATE-WITH-AILI
-                        </div>
-
+                        <p style="margin: 15px 0; font-size: 14px; line-height: 1.6;">Satu tiket jalan bareng sudah aktif. <br>Kabari ya kalau kamu udah siap, Aili!</p>
+                        <div style="background: white; color: #120012; padding: 10px; border-radius: 10px; font-family: 'Courier New', monospace; font-weight: bold; margin-top: 10px;">CODE: DATE-WITH-AILI</div>
                         <p style="font-size: 10px; margin-top: 20px; opacity: 0.6;">*Syarat & Ketentuan: Harus Senyum Terus!*</p>
                     </div>
                 </div>
-                <div class="running"><span>🎈 Cieee yang tiketnya udah aktif! 🎈✨ Makasih ya Aili ✨ 💘🎈 Ditunggu kabarnya ✨ Sampai ketemu nanti ✨</span></div>
+                <div class="running"><span>🎈 Cieee yang tiketnya udah aktif! 🎈✨ Makasih ya Aili ✨ 💘🎈 Ditunggu kabarnya ✨</span></div>
             `;
-            document.body.style.opacity = "1";
-
-            const balloonIcons = ['🎈', '💖', '✨'];
-            setInterval(() => {
-                const b = document.createElement("div");
-                b.className = "balloon";
-                b.innerHTML = balloonIcons[Math.floor(Math.random() * balloonIcons.length)];
-                b.style.left = Math.random() * 100 + "vw";
-                b.style.fontSize = (Math.random() * 20 + 20) + "px";
-                b.style.transition = "transform " + (Math.random() * 3 + 4) + "s linear, opacity 5s ease";
-                document.body.appendChild(b);
-                
-                setTimeout(() => {
-                    b.style.transform = `translateY(-120vh) translateX(${(Math.random() - 0.5) * 100}px) rotate(${Math.random() * 360}deg)`;
-                    b.style.opacity = "0";
-                }, 50);
-                setTimeout(() => b.remove(), 7000);
-            }, 600);
+            appWrapper.style.opacity = "1";
+            startBalloons();
         }, 500);
     };
 
+    function startBalloons() {
+        const balloonIcons = ['🎈', '💖', '✨'];
+        setInterval(() => {
+            const b = document.createElement("div");
+            b.className = "balloon";
+            b.innerHTML = balloonIcons[Math.floor(Math.random() * balloonIcons.length)];
+            b.style.left = Math.random() * 100 + "vw";
+            b.style.fontSize = (Math.random() * 20 + 20) + "px";
+            document.body.appendChild(b);
+            
+            setTimeout(() => {
+                b.style.transition = "transform " + (Math.random() * 3 + 4) + "s linear, opacity 4s ease";
+                b.style.transform = `translateY(-120vh) rotate(${Math.random() * 360}deg)`;
+                b.style.opacity = "0";
+            }, 50);
+            setTimeout(() => b.remove(), 7000);
+        }, 600);
+    }
+
+    // Rain Heart
     setInterval(() => {
         const h = document.createElement("div");
         h.className = "heart-rain"; h.innerHTML = "💖";
